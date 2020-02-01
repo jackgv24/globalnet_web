@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import one from '../../assets/images/user/1.jpg';
 import two from '../../assets/images/user/2.png';
 import eight from '../../assets/images/user/8.jpg';
@@ -8,7 +8,7 @@ import six from '../../assets/images/user/6.jpg';
 import seven from '../../assets/images/user/7.jpg';
 import {Link} from 'react-router-dom'
 
-const RightSidebar = props => {
+const RightSidebar = () => {
         return (
             <div>
                 <div className="right-sidebar" id="right_side_bar">

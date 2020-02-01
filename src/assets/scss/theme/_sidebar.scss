@@ -547,11 +547,11 @@
               a{
                 svg{
                   rect,line,path,circle,polygon,polyline{
-                    color: $primary-color ;
+                    color: $primary-color;
                   }
                 }
                 i,span{
-                  color: $primary-color ;
+                  color: $primary-color;
                   transition: $sidebar-transition;
                 }
               }
@@ -560,7 +560,7 @@
               &:hover{
                 padding-left: 0;
                 i,span{
-                  color: $primary-color ;
+                  color: $primary-color;
                   transition: $sidebar-transition;
                 }
               }
@@ -936,9 +936,6 @@
         li{
           position: relative;
           padding-left: 20px;
-          .status-circle {
-            left: 60px;
-          }
         }
       }
     }

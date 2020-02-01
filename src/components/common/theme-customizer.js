@@ -65,7 +65,7 @@ const ThemeCustomizer = () => {
         });
         document.body.setAttribute('main-theme-layout', layout);
         document.documentElement.dir = layout;
-        dispatch({ type: 'ADD_LAYOUT', payload: layout });
+        dispatch({ type: 'ADD_LAYOUT', payload: layout_type });
     }
 
     const handleSidebarSetting = (e) => {
@@ -100,7 +100,7 @@ const ThemeCustomizer = () => {
 
         if (wrapper === 'compact-wrapper') {
             document.querySelector(".compactLogo").className = 'compactLogo show';
-        } {
+        } else {
             document.querySelector(".compactLogo").className = 'compactLogo hide';
         }
     }
@@ -113,31 +113,31 @@ const ThemeCustomizer = () => {
             localStorage.setItem('secondary_color', '#1ea6ec');
             localStorage.setItem('theme-color', 'style');
             window.location.reload();
-        } if (value === 'light-2') {
+        }if (value === 'light-2') {
             localStorage.setItem('layout_version', 'light');
             localStorage.setItem('primary_color', '#0288d1');
             localStorage.setItem('secondary_color', '#26c6da');
             localStorage.setItem('theme-color', 'color_1');
             window.location.reload();
-        } if (value === 'light-3') {
+        }if (value === 'light-3') {
             localStorage.setItem('layout_version', 'light');
             localStorage.setItem('primary_color', '#8e24aa');
             localStorage.setItem('secondary_color', '#ff6e40');
             localStorage.setItem('theme-color', 'color_2');
             window.location.reload();
-        } if (value === 'light-4') {
+        }if (value === 'light-4') {
             localStorage.setItem('layout_version', 'light');
             localStorage.setItem('primary_color', '#4c2fbf');
             localStorage.setItem('secondary_color', '#2e9de4');
-            localStorage.setItem('theme-color', 'color_3');
+            localStorage.setItem('theme-color', value);
             window.location.reload();
-        } if (value === 'light-5') {
+        }if (value === 'light-5') {
             localStorage.setItem('layout_version', 'light');
             localStorage.setItem('primary_color', '#7c4dff');
             localStorage.setItem('secondary_color', '#7b1fa2');
             localStorage.setItem('theme-color', 'color_4');
             window.location.reload();
-        } if (value === 'light-6') {
+        }if (value === 'light-6') {
             localStorage.setItem('layout_version', 'light');
             localStorage.setItem('primary_color', '#3949ab');
             localStorage.setItem('secondary_color', '#4fc3f7');
@@ -149,31 +149,31 @@ const ThemeCustomizer = () => {
             localStorage.setItem('secondary_color', '#1ea6ec');
             localStorage.setItem('theme-color', 'style');
             window.location.reload();
-        } if (value === 'dark-2') {
+        }if (value === 'dark-2') {
             localStorage.setItem('layout_version', 'dark-only');
             localStorage.setItem('primary_color', '#0288d1');
             localStorage.setItem('secondary_color', '#26c6da');
             localStorage.setItem('theme-color', 'color_1');
             window.location.reload();
-        } if (value === 'dark-3') {
+        }if (value === 'dark-3') {
             localStorage.setItem('layout_version', 'dark-only');
             localStorage.setItem('primary_color', '#8e24aa');
             localStorage.setItem('secondary_color', '#ff6e40');
             localStorage.setItem('theme-color', 'color_2');
             window.location.reload();
-        } if (value === 'dark-4') {
+        }if (value === 'dark-4') {
             localStorage.setItem('layout_version', 'dark-only');
             localStorage.setItem('primary_color', '#4c2fbf');
             localStorage.setItem('secondary_color', '#2e9de4');
             localStorage.setItem('theme-color', 'color_3');
             window.location.reload();
-        } if (value === 'dark-5') {
+        }if (value === 'dark-5') {
             localStorage.setItem('layout_version', 'dark-only');
             localStorage.setItem('primary_color', '#7c4dff');
             localStorage.setItem('secondary_color', '#7b1fa2');
             localStorage.setItem('theme-color', 'color_4');
             window.location.reload();
-        } if (value === 'dark-6') {
+        }if (value === 'dark-6') {
             localStorage.setItem('layout_version', 'dark-only');
             localStorage.setItem('primary_color', '#3949ab');
             localStorage.setItem('secondary_color', '#4fc3f7');
@@ -267,7 +267,7 @@ const ThemeCustomizer = () => {
                             <TabPane tabId="1">
                                 <h6>Layout Type</h6>
                                 <ul className="main-layout layout-grid">
-                                    <li data-attr="ltr" className={`${layout_type === 'ltr' ? 'active' : ''}`} onClick={() => handleLayout('ltr')}>
+                                    <li data-attr="ltr" className={`${layout_type == 'ltr' ? 'active' : ''}`} onClick={() => handleLayout('ltr')}>
                                         <div className="header bg-light">
                                             <ul>
                                                 <li></li>
@@ -284,7 +284,7 @@ const ThemeCustomizer = () => {
                                             </ul>
                                         </div>
                                     </li>
-                                    <li data-attr="rtl" className={`${layout_type === 'rtl' ? 'active' : ''}`} onClick={() => handleLayout('rtl')}>
+                                    <li data-attr="rtl" className={`${layout_type == 'rtl' ? 'active' : ''}`} onClick={() => handleLayout('rtl')}>
                                         <div className="header bg-light">
                                             <ul>
                                                 <li></li>

@@ -70,7 +70,7 @@ $i:1;
 					@if($sidebar-name == light){
 						.sidebar-user {
 							h6{
-								color: $primary-color ;
+								color: $primary-color;
 							}
 							p{
 								color: 	$theme-body-font-color
@@ -81,7 +81,7 @@ $i:1;
 								> a {
 									color: $theme-body-font-color;
 									&:hover {
-										color: $primary-color ;
+										color: $primary-color;
 									}
 								}
 							}
@@ -90,13 +90,13 @@ $i:1;
 									> a{
 										color: $theme-body-font-color;
 										&:hover,&.active{
-											color: $primary-color ;
+											color: $primary-color;
 										}
 									}
 									&.active {
 										> a{
 											&.active{
-												color: $primary-color ;
+												color: $primary-color;
 											}
 										}
 									}
@@ -133,7 +133,7 @@ $i:1;
 			&[sidebar-layout="iconcolor-sidebar"]{
 				.sidebar-menu{
 					li{
-						$colors: $success-color, $secondary-color, $primary-color , $danger-color, $info-color, $warning-color, $light-color;
+						$colors: $success-color, $secondary-color, $primary-color, $danger-color, $info-color, $warning-color, $light-color;
 						$repeat: 100 ;
 						@for $i from 1 through $repeat {
 							&:nth-child(#{length($colors)}n+#{$i}) {
@@ -154,7 +154,7 @@ $i:1;
 				&.light-sidebar{
 					.sidebar-menu{
 						li{
-							$colors: $success-color, $secondary-color, $primary-color , $danger-color, $info-color, $warning-color, $dark-color;
+							$colors: $success-color, $secondary-color, $primary-color, $danger-color, $info-color, $warning-color, $dark-color;
 							$repeat: 100 ;
 							@for $i from 1 through $repeat {
 								&:nth-child(#{length($colors)}n+#{$i}) {
@@ -350,7 +350,7 @@ body {
 					background-color: $white;
 					.sidebar-user {
 						h6{
-							color: $primary-color ;
+							color: $primary-color;
 						}
 						p{
 							color: 	$theme-body-font-color
@@ -361,7 +361,7 @@ body {
 							> a {
 								color: $theme-body-font-color;
 								&:hover {
-									color: $primary-color ;
+									color: $primary-color;
 								}
 							}
 						}
@@ -370,13 +370,13 @@ body {
 								> a{
 									color: $theme-body-font-color;
 									&:hover,&.active{
-										color: $primary-color ;
+										color: $primary-color;
 									}
 								}
 								&.active {
 									> a{
 										&.active{
-											color: $primary-color ;
+											color: $primary-color;
 										}
 									}
 								}
@@ -461,7 +461,7 @@ body {
 			button {
 				color: $dark-small-font-color;
 				&:hover, &:focus {
-					background-color: $primary-color ;
+					background-color: $primary-color;
 					color: $white;
 				}
 			}
@@ -599,7 +599,7 @@ body {
 				color: $black !important;
 			}
 		}
-		@each $border-tab-name, $border-tab-color in (primary, $primary-color ),
+		@each $border-tab-name, $border-tab-color in (primary, $primary-color),
         (secondary, $secondary-color) ,
         (success, $success-color),
         (danger, $danger-color),
@@ -1096,10 +1096,10 @@ body {
 										}
 									}
 									&:hover{
-										color: $primary-color ;
+										color: $primary-color;
 										svg{
 											line, path, circle{
-												color: $primary-color  !important;
+												color: $primary-color !important;
 											}
 										}
 									}
@@ -1265,7 +1265,7 @@ body {
 					}
 					.sidebar-menu {
 						.sidebar-title {
-							color: $primary-color ;
+							color: $primary-color;
 							border-bottom: 1px solid rgba(241, 241, 241, 0.35);
 						}
 						>
@@ -1273,10 +1273,10 @@ body {
 							> a {
 								color: $dark-all-font-color;
 								&.active {
-									color: $primary-color ;
+									color: $primary-color;
 								}
 								&:hover {
-									color: $primary-color ;
+									color: $primary-color;
 								}
 							}
 							.label {
@@ -1567,7 +1567,7 @@ body {
 								}
 								.border-bottom-primary {
 									th{
-										border-bottom: 1px solid $primary-color ;
+										border-bottom: 1px solid $primary-color;
 									}
 								}
 							}
@@ -1593,7 +1593,7 @@ body {
 							tbody {
 								.border-bottom-primary{
 									th, td{
-										border-bottom: 1px solid $primary-color ;
+										border-bottom: 1px solid $primary-color;
 									}
 								}
 							}
@@ -1813,7 +1813,7 @@ body {
 						}
 						.page-item.active {
 							.page-link {
-								background-color: $primary-color ;
+								background-color: $primary-color;
 							}
 						}
 						.ecommerce-widget {
@@ -1918,7 +1918,7 @@ body {
 							a {
 								color: $dark-all-font-color;
 								&:hover {
-									color: $primary-color ;
+									color: $primary-color;
 								}
 							}
 						}
@@ -1938,7 +1938,7 @@ body {
 							button{
 								&:hover
 								{
-									color: $primary-color !important;
+									color: $primary-color!important;
 								}
 							}
 						}
@@ -1950,9 +1950,9 @@ body {
 									color: $dark-all-font-color;
 								}
 								&:hover{
-									color: $primary-color ;
+									color: $primary-color;
 									a{
-										color: $primary-color ;
+										color: $primary-color;
 									}
 								}
 							}
@@ -1974,7 +1974,7 @@ body {
 										&:hover{
 											svg{
 												path, line, polyline, polygon, rect{
-													color: $primary-color  !important;
+													color: $primary-color !important;
 												}
 											}
 										}
@@ -2142,7 +2142,7 @@ body {
 					.select2-drpdwn-project {
 						.form-control {
 							background-color: $dark-card-background !important;
-							border-bottom: 1px solid $primary-color  !important;
+							border-bottom: 1px solid $primary-color !important;
 						}
 					}
 					.checkbox, .radio {
@@ -2552,8 +2552,8 @@ body {
 				border: 1px solid rgba(255, 255, 255, 0.3);
 				color: $dark-all-font-color;
 				&.active {
-					background-color: $primary-color ;
-					border-color: $primary-color ;
+					background-color: $primary-color;
+					border-color: $primary-color;
 					color: $white;
 				}
 				&:hover,
@@ -2827,11 +2827,11 @@ body {
 							&:focus,
 							&:active,
 							&.highlighted{
-								color: $primary-color ;
+								color: $primary-color;
 							}
 							&.current{
 								background-color: $dark-body-background;
-								color: $primary-color ;
+								color: $primary-color;
 							}
 						}
 					}
@@ -2858,7 +2858,7 @@ body {
 					div{
 						a{
 							&:hover{
-								color: $primary-color ;
+								color: $primary-color;
 							}
 						}
 					}
@@ -2878,8 +2878,8 @@ body {
 				}
 				.bg-primary{
 					.btn-link{
-						background-color: $primary-color ;
-						border: 1px solid $primary-color ;
+						background-color: $primary-color;
+						border: 1px solid $primary-color;
 					}
 				}
 				.bg-secondary{
@@ -3075,7 +3075,7 @@ body {
 			background: $dark-border-color;
 			&.active,
 			&.current{
-				background: $primary-color ;
+				background: $primary-color;
 				color: $white;
 			}
 		}
@@ -3267,7 +3267,7 @@ body {
 						&.completed{
 							.task-container{
 								.task-label{
-									color: $primary-color ;
+									color: $primary-color;
 								}
 								.complete-btn{
 									&:hover{
@@ -3415,24 +3415,18 @@ body {
 				}
 			}
 		}
-		@each $var in $alert-name {
-			$i: index($alert-name, $var);
-			.alert-#{$var}.inverse{
-				color: $dark-all-font-color;
-			}
-		}
 		.alert-theme{
 			span{
 				+ span{
 					+ span{
-						border: 1px solid $primary-color ;
+						border: 1px solid $primary-color;
 						background-color: $dark-body-background;
 						border-radius: 4px;
 					}
 				}
 			}
 			i{
-				background-color: $primary-color ;
+				background-color: $primary-color;
 				color: $white;
 				padding: 20px;
 				margin-right: 20px !important;
@@ -3590,7 +3584,7 @@ body {
 				}
 			}
 		}
-		@each $btn-name, $btn-color in (primary, $primary-color ),
+		@each $btn-name, $btn-color in (primary, $primary-color),
 						(secondary, $secondary-color) ,
 						(success, $success-color),
 						(danger, $danger-color),
@@ -3623,7 +3617,7 @@ body {
 			}
 		}
 
-		@each $btn-name, $btn-color in (primary, $primary-color ),
+		@each $btn-name, $btn-color in (primary, $primary-color),
 						(secondary, $secondary-color) ,
 						(success, $success-color),
 						(danger, $danger-color),
@@ -3641,7 +3635,7 @@ body {
 			}
 		}
 
-		@each $btn-name, $btn-color in   (primary, $primary-color ),
+		@each $btn-name, $btn-color in   (primary, $primary-color),
 						(secondary, $secondary-color) ,
 						(success, $success-color),
 						(danger, $danger-color),
@@ -3849,7 +3843,7 @@ body {
 					background-color: $white;
 					.sidebar-user {
 						h6{
-							color: $primary-color ;
+							color: $primary-color;
 						}
 						p{
 							color: 	$theme-body-font-color
@@ -3860,7 +3854,7 @@ body {
 							> a {
 								color: $theme-body-font-color;
 								&:hover {
-									color: $primary-color ;
+									color: $primary-color;
 								}
 							}
 						}
@@ -3869,13 +3863,13 @@ body {
 								> a{
 									color: $theme-body-font-color;
 									&:hover,&.active{
-										color: $primary-color ;
+										color: $primary-color;
 									}
 								}
 								&.active {
 									> a{
 										&.active{
-											color: $primary-color ;
+											color: $primary-color;
 										}
 									}
 								}
@@ -4138,7 +4132,7 @@ body {
 								}
 								.border-bottom-primary {
 									th{
-										border-bottom: 1px solid $primary-color ;
+										border-bottom: 1px solid $primary-color;
 									}
 								}
 							}
@@ -4164,7 +4158,7 @@ body {
 							tbody {
 								.border-bottom-primary{
 									th, td{
-										border-bottom: 1px solid $primary-color ;
+										border-bottom: 1px solid $primary-color;
 									}
 								}
 							}
@@ -4384,7 +4378,7 @@ body {
 						}
 						.page-item.active {
 							.page-link {
-								background-color: $primary-color ;
+								background-color: $primary-color;
 							}
 						}
 						.ecommerce-widget {
@@ -4489,7 +4483,7 @@ body {
 							a {
 								color: $dark-all-font-color;
 								&:hover {
-									color: $primary-color ;
+									color: $primary-color;
 								}
 							}
 						}
@@ -4509,7 +4503,7 @@ body {
 							button{
 								&:hover
 								{
-									color: $primary-color !important;
+									color: $primary-color!important;
 								}
 							}
 						}
@@ -4521,9 +4515,9 @@ body {
 									color: $dark-all-font-color;
 								}
 								&:hover{
-									color: $primary-color ;
+									color: $primary-color;
 									a{
-										color: $primary-color ;
+										color: $primary-color;
 									}
 								}
 							}
@@ -4545,7 +4539,7 @@ body {
 										&:hover{
 											svg{
 												path, line, polyline, polygon, rect{
-													color: $primary-color  !important;
+													color: $primary-color !important;
 												}
 											}
 										}
@@ -4713,7 +4707,7 @@ body {
 					.select2-drpdwn-project {
 						.form-control {
 							background-color: $dark-card-background !important;
-							border-bottom: 1px solid $primary-color  !important;
+							border-bottom: 1px solid $primary-color !important;
 						}
 					}
 					.checkbox, .radio {
@@ -5123,8 +5117,8 @@ body {
 				border: 1px solid rgba(255, 255, 255, 0.3);
 				color: $dark-all-font-color;
 				&.active {
-					background-color: $primary-color ;
-					border-color: $primary-color ;
+					background-color: $primary-color;
+					border-color: $primary-color;
 					color: $white;
 				}
 				&:hover,
@@ -5398,11 +5392,11 @@ body {
 							&:focus,
 							&:active,
 							&.highlighted{
-								color: $primary-color ;
+								color: $primary-color;
 							}
 							&.current{
 								background-color: $dark-body-background;
-								color: $primary-color ;
+								color: $primary-color;
 							}
 						}
 					}
@@ -5429,7 +5423,7 @@ body {
 					div{
 						a{
 							&:hover{
-								color: $primary-color ;
+								color: $primary-color;
 							}
 						}
 					}
@@ -5449,8 +5443,8 @@ body {
 				}
 				.bg-primary{
 					.btn-link{
-						background-color: $primary-color ;
-						border: 1px solid $primary-color ;
+						background-color: $primary-color;
+						border: 1px solid $primary-color;
 					}
 				}
 				.bg-secondary{
@@ -5615,7 +5609,7 @@ body {
 			button {
 				color: $dark-small-font-color;
 				&:hover, &:focus {
-					background-color: $primary-color ;
+					background-color: $primary-color;
 					color: $white;
 				}
 			}
@@ -5753,7 +5747,7 @@ body {
 				color: $black !important;
 			}
 		}
-		@each $border-tab-name, $border-tab-color in (primary, $primary-color ),
+		@each $border-tab-name, $border-tab-color in (primary, $primary-color),
         (secondary, $secondary-color) ,
         (success, $success-color),
         (danger, $danger-color),
@@ -6181,7 +6175,7 @@ body {
 			background: $dark-border-color;
 			&.active,
 			&.current{
-				background: $primary-color ;
+				background: $primary-color;
 				color: $white;
 			}
 		}
@@ -6373,7 +6367,7 @@ body {
 						&.completed{
 							.task-container{
 								.task-label{
-									color: $primary-color ;
+									color: $primary-color;
 								}
 								.complete-btn{
 									&:hover{
@@ -6521,24 +6515,18 @@ body {
 				}
 			}
 		}
-		@each $var in $alert-name {
-			$i: index($alert-name, $var);
-			.alert-#{$var}.inverse{
-				color: $dark-all-font-color;
-			}
-		}
 		.alert-theme{
 			span{
 				+ span{
 					+ span{
-						border: 1px solid $primary-color ;
+						border: 1px solid $primary-color;
 						background-color: $dark-body-background;
 						border-radius: 4px;
 					}
 				}
 			}
 			i{
-				background-color: $primary-color ;
+				background-color: $primary-color;
 				color: $white;
 				padding: 20px;
 				margin-right: 20px !important;
@@ -6747,7 +6735,7 @@ body {
 				}
 			}
 		}
-		@each $btn-name, $btn-color in (primary, $primary-color ),
+		@each $btn-name, $btn-color in (primary, $primary-color),
 						(secondary, $secondary-color) ,
 						(success, $success-color),
 						(danger, $danger-color),
@@ -6780,7 +6768,7 @@ body {
 			}
 		}
 
-		@each $btn-name, $btn-color in (primary, $primary-color ),
+		@each $btn-name, $btn-color in (primary, $primary-color),
 						(secondary, $secondary-color) ,
 						(success, $success-color),
 						(danger, $danger-color),
@@ -6798,7 +6786,7 @@ body {
 			}
 		}
 
-		@each $btn-name, $btn-color in   (primary, $primary-color ),
+		@each $btn-name, $btn-color in   (primary, $primary-color),
 						(secondary, $secondary-color) ,
 						(success, $success-color),
 						(danger, $danger-color),
@@ -7089,10 +7077,10 @@ body {
 										}
 									}
 									&:hover {
-										color: $primary-color ;
+										color: $primary-color;
 										svg {
 											line, path, circle {
-												color: $primary-color  !important;
+												color: $primary-color !important;
 											}
 										}
 									}
@@ -7272,7 +7260,7 @@ body {
 			button {
 				color: $dark-small-font-color;
 				&:hover, &:focus {
-					background-color: $primary-color ;
+					background-color: $primary-color;
 					color: $white;
 				}
 			}
@@ -7410,7 +7398,7 @@ body {
 				color: $black !important;
 			}
 		}
-		@each $border-tab-name, $border-tab-color in (primary, $primary-color ),
+		@each $border-tab-name, $border-tab-color in (primary, $primary-color),
         (secondary, $secondary-color) ,
         (success, $success-color),
         (danger, $danger-color),
@@ -7925,7 +7913,7 @@ body {
 					}
 					.sidebar-menu {
 						.sidebar-title {
-							color: $primary-color ;
+							color: $primary-color;
 							border-bottom: 1px solid rgba(241, 241, 241, 0.35);
 						}
 						>
@@ -7933,10 +7921,10 @@ body {
 							> a {
 								color: $dark-all-font-color;
 								&.active {
-									color: $primary-color ;
+									color: $primary-color;
 								}
 								&:hover {
-									color: $primary-color ;
+									color: $primary-color;
 								}
 							}
 							.label {
@@ -7962,10 +7950,10 @@ body {
 								> a {
 									color: $sidebar-submenu-font-color;
 									&:hover {
-										color: $primary-color ;
+										color: $primary-color;
 									}
 									&.active {
-										color: $primary-color ;
+										color: $primary-color;
 									}
 								}
 							}
@@ -8238,7 +8226,7 @@ body {
 								}
 								.border-bottom-primary {
 									th{
-										border-bottom: 1px solid $primary-color ;
+										border-bottom: 1px solid $primary-color;
 									}
 								}
 							}
@@ -8264,7 +8252,7 @@ body {
 							tbody {
 								.border-bottom-primary{
 									th, td{
-										border-bottom: 1px solid $primary-color ;
+										border-bottom: 1px solid $primary-color;
 									}
 								}
 							}
@@ -8483,7 +8471,7 @@ body {
 						}
 						.page-item.active {
 							.page-link {
-								background-color: $primary-color ;
+								background-color: $primary-color;
 							}
 						}
 						.ecommerce-widget {
@@ -8588,7 +8576,7 @@ body {
 							a {
 								color: $dark-all-font-color;
 								&:hover {
-									color: $primary-color ;
+									color: $primary-color;
 								}
 							}
 						}
@@ -8607,7 +8595,7 @@ body {
 						li {
 							button {
 								&:hover {
-									color: $primary-color  !important;
+									color: $primary-color !important;
 								}
 							}
 						}
@@ -8619,9 +8607,9 @@ body {
 									color: $dark-all-font-color;
 								}
 								&:hover {
-									color: $primary-color ;
+									color: $primary-color;
 									a {
-										color: $primary-color ;
+										color: $primary-color;
 									}
 								}
 							}
@@ -8643,7 +8631,7 @@ body {
 										&:hover{
 											svg{
 												path, line, polyline, polygon, rect{
-													color: $primary-color  !important;
+													color: $primary-color !important;
 												}
 											}
 										}
@@ -8811,7 +8799,7 @@ body {
 					.select2-drpdwn-project {
 						.form-control {
 							background-color: $dark-card-background !important;
-							border-bottom: 1px solid $primary-color  !important;
+							border-bottom: 1px solid $primary-color !important;
 						}
 					}
 					.checkbox, .radio {
@@ -9221,8 +9209,8 @@ body {
 				border: 1px solid rgba(255, 255, 255, 0.3);
 				color: $dark-all-font-color;
 				&.active {
-					background-color: $primary-color ;
-					border-color: $primary-color ;
+					background-color: $primary-color;
+					border-color: $primary-color;
 					color: $white;
 				}
 				&:hover,
@@ -9473,8 +9461,8 @@ body {
 				}
 				.bg-primary {
 					.btn-link {
-						background-color: $primary-color ;
-						border: 1px solid $primary-color ;
+						background-color: $primary-color;
+						border: 1px solid $primary-color;
 					}
 				}
 				.bg-secondary {
@@ -9643,7 +9631,7 @@ body {
 			background: $dark-border-color;
 			&.active,
 			&.current {
-				background: $primary-color ;
+				background: $primary-color;
 				color: $white;
 			}
 		}
@@ -9835,7 +9823,7 @@ body {
 						&.completed {
 							.task-container {
 								.task-label {
-									color: $primary-color ;
+									color: $primary-color;
 								}
 								.complete-btn {
 									&:hover {
@@ -9983,24 +9971,18 @@ body {
 				}
 			}
 		}
-		@each $var in $alert-name {
-			$i: index($alert-name, $var);
-			.alert-#{$var}.inverse{
-				color: $dark-all-font-color;
-			}
-		}
 		.alert-theme{
 			span{
 				+ span{
 					+ span{
-						border: 1px solid $primary-color ;
+						border: 1px solid $primary-color;
 						background-color: $dark-body-background;
 						border-radius: 4px;
 					}
 				}
 			}
 			i{
-				background-color: $primary-color ;
+				background-color: $primary-color;
 				color: $white;
 				padding: 20px;
 				margin-right: 20px !important;
@@ -10158,7 +10140,7 @@ body {
 				}
 			}
 		}
-		@each $btn-name, $btn-color in (primary, $primary-color ),
+		@each $btn-name, $btn-color in (primary, $primary-color),
 						(secondary, $secondary-color) ,
 						(success, $success-color),
 						(danger, $danger-color),
@@ -10191,7 +10173,7 @@ body {
 			}
 		}
 
-		@each $btn-name, $btn-color in (primary, $primary-color ),
+		@each $btn-name, $btn-color in (primary, $primary-color),
 						(secondary, $secondary-color) ,
 						(success, $success-color),
 						(danger, $danger-color),
@@ -10209,7 +10191,7 @@ body {
 			}
 		}
 
-		@each $btn-name, $btn-color in   (primary, $primary-color ),
+		@each $btn-name, $btn-color in   (primary, $primary-color),
 						(secondary, $secondary-color) ,
 						(success, $success-color),
 						(danger, $danger-color),
