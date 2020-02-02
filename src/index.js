@@ -10,16 +10,15 @@ import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import store from './store/index';
 import App from './components/app';
-import { session,default as data } from './data/base';
+import { session } from './data/base';
 
 // Import custom Components
 
 import Default from './components/dashboard/defaultCompo/default';
-import Signin from './auth/signin';
+import SignIn from './auth/signin';
 
 // sample page
 import Samplepage from './components/sample/samplepage';
-import SupportTicket from './components/support-ticket/supportTicket';
 
 //firebase Auth
 function Root() {
@@ -28,7 +27,11 @@ function Root() {
     useEffect(() => {
         const themeColor = localStorage.getItem('theme-color');
         const layout = localStorage.getItem('layout_version');
-        session.onAuthStateChanged((data)=>{if(!data) {setCurrentUser(false);}});
+        session.onAuthStateChanged(data => {
+            if (!data) {
+                setCurrentUser(false);
+            }
+        });
         document
             .getElementById('color')
             .setAttribute('href', `${process.env.PUBLIC_URL}/assets/css/${themeColor}.css`);
@@ -41,7 +44,7 @@ function Root() {
                 <BrowserRouter basename={'/'}>
                     <ScrollContext>
                         <Switch>
-                            <Route path={`${process.env.PUBLIC_URL}/login`} component={Signin} />
+                            <Route path={`${process.env.PUBLIC_URL}/login`} component={SignIn} />
                             {currentUser ? (
                                 <Fragment>
                                     <App>
@@ -61,12 +64,6 @@ function Root() {
                                         <Route
                                             path={`${process.env.PUBLIC_URL}/sample/samplepage`}
                                             component={Samplepage}
-                                        />
-
-                                        {/* Pricing */}
-                                        <Route
-                                            path={`${process.env.PUBLIC_URL}/support-ticket/supportTicket`}
-                                            component={SupportTicket}
                                         />
                                     </App>
                                 </Fragment>

@@ -14,6 +14,9 @@ export class ConfigDB {
             mix_layout: 'default',
         },
         router_animation: 'fadeIn',
+        session:{
+            minute:15
+        }
     };
 }
 

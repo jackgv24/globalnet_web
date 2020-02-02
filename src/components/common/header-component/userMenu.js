@@ -2,6 +2,8 @@ import React, { Fragment } from 'react';
 import man from '../../../assets/images/dashboard/user.png';
 import { User, Mail, Lock, Settings, LogOut } from 'react-feather';
 
+import {signOut} from "../../../auth/signin"
+
 
 const UserMenu = () => {
     return (
@@ -19,7 +21,7 @@ const UserMenu = () => {
                     <li><a href="#javascript"><Mail />Inbox</a></li>
                     <li><a href="#javascript"><Lock />Lock Screen</a></li>
                     <li><a href="#javascript"><Settings />Settings</a></li>
-                    <li><a href="#javascript"><LogOut /> Log out</a></li>
+                    <li><a href="" onClick={signOut}><LogOut /> Log out</a></li>
                 </ul>
             </li>
         </Fragment>

@@ -7,8 +7,19 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { withRouter } from 'react-router';
 import { session } from '../data/base';
+import { ConfigDB as config } from "../data/customizer/config";
+import { Local as storage } from '../helpers/expirate-storage';
+import { SESSION } from '../constant/storeKeys';
 
-const Signin = ({ history }) => {
+const signOut = async () => {
+    try {
+        await session.signOut();
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+const SignIn = ({ history }) => {
     const [email, setEmail] = useState('zadirg95@gmail.com');
     const [password, setPassword] = useState('Admin@123');
     const [value, setValue] = useState(localStorage.getItem('profileURL' || man));
@@ -17,13 +28,17 @@ const Signin = ({ history }) => {
         localStorage.setItem('profileURL', value);
     }, [value]);
 
-    const loginAuth = async () => {
+    const loginAuth = async (event) => {
         try {
+            event.preventDefault();
+            console.log('se esta disparando este evento cuando no debería de ocurrir');
             await session.setPersistence(auth.Auth.Persistence.LOCAL);
-            await session.signInWithEmailAndPassword(email, password)
+            await session.signInWithEmailAndPassword(email, password);
+            storage.set(SESSION,JSON.stringify(session.currentUser),{minute:config.data.session.minute})
             setValue(man);
             history.push(`${process.env.PUBLIC_URL}/dashboard/default`);
         } catch (error) {
+            console.error(error);
             setTimeout(() => {
                 toast.error(
                     'Oppss.. The password is invalid or the user does not have a password.',
@@ -91,7 +106,7 @@ const Signin = ({ history }) => {
                                                         <button
                                                             className="btn btn-primary btn-block"
                                                             type="button"
-                                                            onClick={() => loginAuth()}
+                                                            onClick={loginAuth}
                                                         >
                                                             Login
                                                         </button>
@@ -112,4 +127,5 @@ const Signin = ({ history }) => {
     );
 };
 
-export default withRouter(Signin);
+export default withRouter(SignIn);
+export {signOut};
