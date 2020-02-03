@@ -11,7 +11,7 @@ import { ConfigDB as config } from "../data/customizer/config";
 import { Local as storage } from '../helpers/expirate-storage';
 import { SESSION } from '../constant/storeKeys';
 
-const signOut = async () => {
+const logOut = async () => {
     try {
         await session.signOut();
     } catch (error) {
@@ -31,10 +31,9 @@ const SignIn = ({ history }) => {
     const loginAuth = async (event) => {
         try {
             event.preventDefault();
-            console.log('se esta disparando este evento cuando no debería de ocurrir');
             await session.setPersistence(auth.Auth.Persistence.LOCAL);
             await session.signInWithEmailAndPassword(email, password);
-            storage.set(SESSION,JSON.stringify(session.currentUser),{minute:config.data.session.minute})
+            storage.set(SESSION,JSON.stringify(session.currentUser),{minute:config.data.session.expiration.minute});
             setValue(man);
             history.push(`${process.env.PUBLIC_URL}/dashboard/default`);
         } catch (error) {
@@ -128,4 +127,4 @@ const SignIn = ({ history }) => {
 };
 
 export default withRouter(SignIn);
-export {signOut};
+export {logOut};

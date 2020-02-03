@@ -10,6 +10,7 @@ import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import store from './store/index';
 import App from './components/app';
+import Session from './components/common/sessionComponent';
 import { session } from './data/base';
 
 // Import custom Components
@@ -19,6 +20,7 @@ import SignIn from './auth/signin';
 
 // sample page
 import Samplepage from './components/sample/samplepage';
+import { SESSION } from './constant/storeKeys';
 
 //firebase Auth
 function Root() {
@@ -27,11 +29,11 @@ function Root() {
     useEffect(() => {
         const themeColor = localStorage.getItem('theme-color');
         const layout = localStorage.getItem('layout_version');
+
         session.onAuthStateChanged(data => {
-            if (!data) {
-                setCurrentUser(false);
-            }
+            setCurrentUser(!!data);
         });
+
         document
             .getElementById('color')
             .setAttribute('href', `${process.env.PUBLIC_URL}/assets/css/${themeColor}.css`);
@@ -46,9 +48,8 @@ function Root() {
                         <Switch>
                             <Route path={`${process.env.PUBLIC_URL}/login`} component={SignIn} />
                             {currentUser ? (
-                                <Fragment>
+                                <Session>
                                     <App>
-                                        {/* dashboard menu */}
                                         <Route
                                             exact
                                             path={`${process.env.PUBLIC_URL}/`}
@@ -59,14 +60,12 @@ function Root() {
                                             path={`${process.env.PUBLIC_URL}/dashboard/default`}
                                             component={Default}
                                         />
-
-                                        {/* Sample page */}
                                         <Route
                                             path={`${process.env.PUBLIC_URL}/sample/samplepage`}
                                             component={Samplepage}
                                         />
                                     </App>
-                                </Fragment>
+                                </Session>
                             ) : (
                                 <Redirect to={`${process.env.PUBLIC_URL}/login`} />
                             )}

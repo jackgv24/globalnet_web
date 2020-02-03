@@ -15,7 +15,10 @@ export class ConfigDB {
         },
         router_animation: 'fadeIn',
         session:{
-            minute:15
+            expiration:{
+                minute:1
+            },
+            setTimeout:30000
         }
     };
 }

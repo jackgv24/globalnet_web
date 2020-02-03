@@ -7,7 +7,6 @@ const Loader = () => {
             setShow(false)
           }, 1000);
         return ()=>{
-            console.log(id);
             clearTimeout(id);
         };
     },[show]);

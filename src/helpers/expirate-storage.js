@@ -1,32 +1,26 @@
-import { isDate } from "moment";
+import { isDate } from 'moment';
 
 class LocalStorage {
     get(key) {
-        const { value = null, expiration = null } = JSON.parse(localStorage.getItem(key));
-        if (!value && !expiration) {
-            this.remove(key);
-            return null;
+        const { value = null, expiration = null } = JSON.parse(localStorage.getItem(key) || '{}');
+        if((!expiration && !!value) || (new Date(expiration) > new Date())){
+            return value;
         }
-        if (!expiration) return value;
-        if (!isDate(expiration)) {
-            this.remove(key);
-            return null;
-        }
-        if (new Date() < new Date(expiration)) {
-            this.remove(key);
-            return null;
-        }
-        return value;
+        this.remove(key);
+        return null;
     }
 
     set(key, value, { hour = null, minute = null, seconds = null }) {
-        if (!hour && !minute && !seconds) localStorage.setItem(key, JSON.stringify({ value }));
+        if (!hour && !minute && !seconds)
+        {
+            localStorage.setItem(key, JSON.stringify({ value: value }));
+        }
         else {
             const exp = new Date();
             if (typeof hour === 'number') exp.setHours(exp.getHours() + hour);
             if (typeof minute === 'number') exp.setMinutes(exp.getMinutes() + minute);
             if (typeof seconds === 'number') exp.setSeconds(exp.getSeconds() + seconds);
-            localStorage.setItem(key, JSON.stringify({ value:value, expiration: exp.toDateString() }));
+            localStorage.setItem(key, JSON.stringify({ expiration: exp.toString(),value: value }));
         }
     }
 
