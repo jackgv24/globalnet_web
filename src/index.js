@@ -20,6 +20,9 @@ import SignIn from './auth/signin';
 
 // sample page
 import Samplepage from './components/sample/samplepage';
+import {default as Lab} from './components/dashboard/componentLab';
+import { default as ColaboradorView } from './components/dashboard/colaborador/colaborador.view'
+import { default as ColaboradorAdd } from './components/dashboard/colaborador/colaborador.add'
 import { SESSION } from './constant/storeKeys';
 
 //firebase Auth
@@ -50,20 +53,12 @@ function Root() {
                             {currentUser ? (
                                 <Session>
                                     <App>
-                                        <Route
-                                            exact
-                                            path={`${process.env.PUBLIC_URL}/`}
-                                            component={Default}
-                                        />
-                                        <Route
-                                            exact
-                                            path={`${process.env.PUBLIC_URL}/dashboard/default`}
-                                            component={Default}
-                                        />
-                                        <Route
-                                            path={`${process.env.PUBLIC_URL}/sample/samplepage`}
-                                            component={Samplepage}
-                                        />
+                                        <Route exact path={`${process.env.PUBLIC_URL}/`} component={Default}/>
+                                        <Route exact path={`${process.env.PUBLIC_URL}/dashboard/default`} component={Default}/>
+                                        <Route path={`${process.env.PUBLIC_URL}/sample/samplepage`} component={Samplepage}/>
+                                        <Route exact path={`${process.env.PUBLIC_URL}/colaborador`} component={ColaboradorView}/>
+                                        <Route exact path={`${process.env.PUBLIC_URL}/colaborador/agregar`} component={ColaboradorAdd}/>
+                                        <Route exact path={`${process.env.PUBLIC_URL}/labs`} component={Lab} />
                                     </App>
                                 </Session>
                             ) : (

@@ -18,7 +18,7 @@ export class ConfigDB {
             expiration:{
                 minute:1
             },
-            setTimeout:30000
+            setTimeout:2000
         }
     };
 }

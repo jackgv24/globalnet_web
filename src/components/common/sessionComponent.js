@@ -13,14 +13,11 @@ const Session = ({ children, ...props }) => {
     const checkSession = () => {
         const _pid = setInterval(() => {
             const _session = storage.get(SESSION);
-            setSession(_session);
-            console.log(_session);
             if (_session) {
-                console.log('existe la sesion');
+                setSession(_session);
                 storage.refresh(SESSION, { minute: config.data.session.expiration.minute });
             } else if (_pid) {
                 // esto es para que el intervalo no se siga ejecutando
-                console.error('no se va a seguir ejecutando el intervalo');
                 clearInterval(_pid);
                 setPid(null);
                 logOut();
@@ -35,6 +32,7 @@ const Session = ({ children, ...props }) => {
     useEffect(() => {
         /* Se agrega el evento para que cuando la persona se cruce de tab entonces se detenga el hilo de refrescar la session */
         document.addEventListener('visibilitychange', visibilityChange);
+        checkSession();
         setIsInit(true);
         return () => {
             document.removeEventListener('visibilitychange', () => null);
@@ -51,9 +49,7 @@ const Session = ({ children, ...props }) => {
                 clearInterval(pid);
                 setPid(null);
             } else if (!pid) {
-                //refrescamiento de pid
                 const _pid = checkSession();
-                clearInterval(pid);
                 setPid(_pid);
             }
         }

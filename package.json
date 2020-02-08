@@ -64,7 +64,7 @@
     "react-stepzilla": "^6.0.2",
     "react-stickies": "0.0.16",
     "react-switch-lang": "^1.0.2",
-    "react-table": "^6.10.3",
+    "react-table": "^6.11.5",
     "react-tabs": "^3.0.0",
     "react-times": "^3.1.12",
     "react-to-print": "^2.5.0",
@@ -86,7 +86,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy":"npm run build && firebase deploy --only hosting"
+    "deploy": "npm run build && firebase deploy --only hosting"
   },
   "eslintConfig": {
     "extends": "react-app"
