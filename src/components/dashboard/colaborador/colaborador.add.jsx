@@ -2,15 +2,29 @@ import React, { useState } from 'react';
 import useForm from 'react-hook-form';
 import user from '../../../assets/images/user/user.png';
 import Breadcrumb from '../../common/breadcrumb';
+import NestedList from '../../common/nestedList';
 
 const Agregar = () => {
     const { register, handleSubmit, errors } = useForm();
-    const [validateClass , setValidateClass] = useState(false);
+    const [validateClass, setValidateClass] = useState(false);
     const [url, setUrl] = useState();
-
-    const readUrl = (event) => {
-        if (event.target.files.length === 0)
+    const [data] = useState([
+        { id: '1', url: 'agregar', title: 'agregar', type: 'link' },
         {
+            id: '2',
+            url: 'modificar',
+            title: 'modificar',
+            tag: 'colaborador',
+            type: 'sub',
+            items: [
+                { title: 'test', url: 'test', estado: false },
+                { title: 'test 2', url: 'test' },
+            ],
+        },
+    ]);
+
+    const readUrl = event => {
+        if (event.target.files.length === 0) {
             return;
         }
         //Image upload validation
@@ -21,10 +35,10 @@ const Agregar = () => {
         // Image upload
         const reader = new FileReader();
         reader.readAsDataURL(event.target.files[0]);
-        reader.onload = (_event) => {
-            setUrl(reader.result)
-        }
-    }
+        reader.onload = _event => {
+            setUrl(reader.result);
+        };
+    };
 
     const onSubmit = data => {
         if (data != '') {
@@ -39,15 +53,26 @@ const Agregar = () => {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-12">
-                        <form className={`needs-validation tooltip-validation ${validateClass ? 'validateClass' : ''}`} noValidate="" onSubmit={handleSubmit(onSubmit)}>
+                        <form
+                            className={`needs-validation tooltip-validation ${
+                                validateClass ? 'validateClass' : ''
+                            }`}
+                            noValidate=""
+                            onSubmit={handleSubmit(onSubmit)}
+                        >
                             <div className="row">
                                 <div className="col-12 col-md-6 col-lg-5 col-xl-3">
                                     <div className="row">
                                         <div className="col-12">
                                             <div className="card">
                                                 <div className="card-header">
-                                                    <h5 className="font-primary">Información General</h5>
-                                                    <span>En esta seccion se recolecta la información general del colaborador</span>
+                                                    <h5 className="font-primary">
+                                                        Información General
+                                                    </h5>
+                                                    <span>
+                                                        En esta seccion se recolecta la información
+                                                        general del colaborador
+                                                    </span>
                                                 </div>
                                                 <div className="card-body">
                                                     <div className="form-row">
@@ -55,10 +80,21 @@ const Agregar = () => {
                                                             <div className="text-center user-profile">
                                                                 <div className="hovercard">
                                                                     <div className="contact-profile">
-                                                                        <img className="shadow-sm bg-ligth rounded-circle img-100" src={url ? url : user} alt="" />
+                                                                        <img
+                                                                            className="shadow-sm bg-ligth rounded-circle img-100"
+                                                                            src={url ? url : user}
+                                                                            alt=""
+                                                                        />
                                                                         <div className="icon-wrapper">
                                                                             <i className="icofont icofont-pencil-alt-5">
-                                                                                <input className="upload" type="file" accept="image/*" onChange={readUrl}/>
+                                                                                <input
+                                                                                    className="upload"
+                                                                                    type="file"
+                                                                                    accept="image/*"
+                                                                                    onChange={
+                                                                                        readUrl
+                                                                                    }
+                                                                                />
                                                                             </i>
                                                                         </div>
                                                                     </div>
@@ -66,26 +102,77 @@ const Agregar = () => {
                                                             </div>
                                                         </div>
                                                         <div className="col-12 mb-3">
-                                                            <label htmlFor="valNombre">Nombre Completo</label>
-                                                            <input className="form-control" id="valNombre" name="nombre" type="text" placeholder="Ingresa el nombre completo" ref={register({ required: true })}/>
-                                                            <span>{errors.nombre &&'Nombre es requerido'}</span>
-                                                            <div className="valid-feedback">Looks good!</div>
+                                                            <label htmlFor="valNombre">
+                                                                Nombre Completo
+                                                            </label>
+                                                            <input
+                                                                className="form-control"
+                                                                id="valNombre"
+                                                                name="nombre"
+                                                                type="text"
+                                                                placeholder="Ingresa el nombre completo"
+                                                                ref={register({ required: true })}
+                                                            />
+                                                            <span>
+                                                                {errors.nombre &&
+                                                                    'Nombre es requerido'}
+                                                            </span>
+                                                            <div className="valid-feedback">
+                                                                Looks good!
+                                                            </div>
                                                         </div>
                                                         <div className="col-12 mb-3">
                                                             <label htmlFor="valEmail">Email</label>
-                                                            <input className="form-control" id="valEmail" name="email" type="email" placeholder="Ingresa email" ref={register({ required: true })}/>
-                                                            <span>{errors.nombre &&'Email es requerido'}</span>
-                                                            <div className="valid-feedback">Looks good!</div>
+                                                            <input
+                                                                className="form-control"
+                                                                id="valEmail"
+                                                                name="email"
+                                                                type="email"
+                                                                placeholder="Ingresa email"
+                                                                ref={register({ required: true })}
+                                                            />
+                                                            <span>
+                                                                {errors.nombre &&
+                                                                    'Email es requerido'}
+                                                            </span>
+                                                            <div className="valid-feedback">
+                                                                Looks good!
+                                                            </div>
                                                         </div>
                                                         <div className="col-md-12 mb-3">
-                                                            <label htmlFor="valIdentificacion">Cedula</label>
-                                                            <input className="form-control" id="valIdentificacion" name="cedula" type="text" placeholder="Ingresa cédula" ref={register({ required: true,pattern:/[0-9]{3}(-{0,}|\s{0,})[0-9]{6}(-{0,}|\s{0,})[0-9]{4}[A-z]{1}/gm })}/>
-                                                            <span>{errors.cedula &&'Cédula es requerida'}</span>
-                                                            <div className="valid-feedback">Looks good!</div>
+                                                            <label htmlFor="valIdentificacion">
+                                                                Cedula
+                                                            </label>
+                                                            <input
+                                                                className="form-control"
+                                                                id="valIdentificacion"
+                                                                name="cedula"
+                                                                type="text"
+                                                                placeholder="Ingresa cédula"
+                                                                ref={register({
+                                                                    required: true,
+                                                                    pattern: /[0-9]{3}(-{0,}|\s{0,})[0-9]{6}(-{0,}|\s{0,})[0-9]{4}[A-z]{1}/gm,
+                                                                })}
+                                                            />
+                                                            <span>
+                                                                {errors.cedula &&
+                                                                    'Cédula es requerida'}
+                                                            </span>
+                                                            <div className="valid-feedback">
+                                                                Looks good!
+                                                            </div>
                                                         </div>
                                                         <div className="col-md-12 mb-3">
-                                                            <label htmlFor="valDireccion">Dirección</label>
-                                                            <textarea className="form-control" id="valDireccion" name="direccion" placeholder="Direccion completa" ref={register({ required: true })}></textarea>
+                                                            <label htmlFor="valDireccion">
+                                                                Dirección
+                                                            </label>
+                                                            <textarea
+                                                                className="form-control"
+                                                                id="valDireccion"
+                                                                name="direccion"
+                                                                placeholder="Direccion completa"
+                                                                ref={register({ required: true })}
+                                                            ></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -105,8 +192,10 @@ const Agregar = () => {
                                                     </span>
                                                 </div>
                                                 <div className="card-body">
-                                                    <div className="form-row">
-                                                        
+                                                    <div className="row">
+                                                        <div className="col-12">
+                                                            <NestedList init={data}/>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
