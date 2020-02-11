@@ -6,3 +6,14 @@ export const ADD_SIDEBAR_SETTINGS ="ADD_SIDEBAR_SETTINGS";
 export const ADD_COLOR = "ADD_COLOR";
 export const ADD_MIXlAYOUT = "ADD_MIXlAYOUT";
 
+//PERMISOS
+export const INIT_PERMISO = "INIT_PERMISO";
+export const ADD_PERMISO = "ADD_PERMISO";
+export const ADD_PERMISOS = "ADD_PERMISOS";
+export const CLEAR_PERMISOS = "CLEAR_PERMISOS";
+
+//CARGOS
+export const INIT_CARGO = "INIT_CARGO";
+export const ADD_CARGO = "ADD_CARGO";
+export const ADD_CARGOS = "ADD_CARGOS";
+export const CLEAR_CARGO = "CLEAR_CARGO";

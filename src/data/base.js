@@ -10,13 +10,13 @@ const app = firebase.initializeApp({
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGEING_SENDER_ID,
   appId:process.env.REACT_APP_FIREBASE_API_ID
-});
+},"globalnet");
 
 export const googleProvider = new firebase.auth.GoogleAuthProvider();
 export const facebookProvider = new firebase.auth.FacebookAuthProvider();
 export const twitterProvider = new  firebase.auth.TwitterAuthProvider();
 export const githubProvider = new  firebase.auth.GithubAuthProvider();
-export const db =  firebase.firestore();
-export const session = firebase.auth();
+export const db =  app.firestore();
+export const session = app.auth();
 
 export default app;

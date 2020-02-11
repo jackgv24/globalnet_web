@@ -17,6 +17,18 @@ const ComponentLab = () => {
                 { title: 'test 2', url: 'test' },
             ],
         },
+        { id: '4', url: 'agregar 2', title: 'agregar', type: 'link',tag:'cables' },
+        {
+            id: '5',
+            url: 'modificar 2',
+            title: 'modificar',
+            tag: 'cables',
+            type: 'sub',
+            items: [
+                { title: 'test', url: 'test', estado: false },
+                { title: 'test 2', url: 'test' },
+            ],
+        },
     ]);
     const [fill,setFill] = useState([]);
     const onChange = data => {

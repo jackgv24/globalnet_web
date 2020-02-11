@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { default as Select } from 'react-select';
 import useForm from 'react-hook-form';
 import user from '../../../assets/images/user/user.png';
 import Breadcrumb from '../../common/breadcrumb';
@@ -8,20 +9,8 @@ const Agregar = () => {
     const { register, handleSubmit, errors } = useForm();
     const [validateClass, setValidateClass] = useState(false);
     const [url, setUrl] = useState();
-    const [data] = useState([
-        { id: '1', url: 'agregar', title: 'agregar', type: 'link' },
-        {
-            id: '2',
-            url: 'modificar',
-            title: 'modificar',
-            tag: 'colaborador',
-            type: 'sub',
-            items: [
-                { title: 'test', url: 'test', estado: false },
-                { title: 'test 2', url: 'test' },
-            ],
-        },
-    ]);
+    const [permiso, setPermisos] = useState([]);
+    const [cargos,setCargos] = useState([])
 
     const readUrl = event => {
         if (event.target.files.length === 0) {
@@ -61,7 +50,7 @@ const Agregar = () => {
                             onSubmit={handleSubmit(onSubmit)}
                         >
                             <div className="row">
-                                <div className="col-12 col-md-6 col-lg-5 col-xl-3">
+                                <div className="col-12 col-md-6 col-lg-5 col-xl-5">
                                     <div className="row">
                                         <div className="col-12">
                                             <div className="card">
@@ -176,11 +165,15 @@ const Agregar = () => {
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div className="card-footer">
+                                                    <button class="btn btn-primary mr-1" type="submit">Submit</button>
+                                                    <input class="btn btn-light" type="reset"/>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-12 col-md-6 col-lg-7 col-xl-9">
+                                <div className="col-12 col-md-6 col-lg-7 col-xl-5">
                                     <div className="row">
                                         <div className="col-12">
                                             <div className="card">
@@ -193,8 +186,21 @@ const Agregar = () => {
                                                 </div>
                                                 <div className="card-body">
                                                     <div className="row">
+                                                    <div className="col-12 mb-3">
+                                                            <label htmlFor="valNombre">
+                                                                Nombre Completo
+                                                            </label>
+                                                            <Select
+                                                                className="basic-single"
+                                                                isClearable={true}
+                                                                isSearchable={true}
+                                                                name="cargo"
+                                                                options={cargos}
+                                                                ref={register()}
+                                                            />
+                                                        </div>
                                                         <div className="col-12">
-                                                            <NestedList init={data}/>
+                                                            <NestedList init={permiso} maxHeight='33rem'/>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -9,10 +9,7 @@ const ItemSub = ({ onClick, index, title, tag = null, items = [] }) => {
     };
     return (
         <>
-            <a
-                className="list-group-item d-flex flex-row justify-content-between align-items-center"
-                onClick={onCollapse}
-            >
+            <a className="list-group-item d-flex flex-row justify-content-between align-items-center" onClick={onCollapse} style={ { borderRadius: 0 }}>
                 <div className="mt-1 d-flex w-100">
                     <div className="d-flex w-100 justify-content-between">
                         <div>
@@ -39,7 +36,7 @@ const ItemSub = ({ onClick, index, title, tag = null, items = [] }) => {
                         <div
                             key={i}
                             className="bg-light text-dark list-group-item d-flex flex-row justify-content-between align-items-center"
-                            style={i == 0 ? { borderRadius: 0 } : {}}
+                            style={ { borderRadius: 0 }}
                         >
                             <div className="pl-4">{title}</div>
                             <div className="form-group my-auto">
@@ -58,7 +55,7 @@ const ItemSub = ({ onClick, index, title, tag = null, items = [] }) => {
 };
 const Item = ({ onClick, index, title, estado, ...props }) => {
     return (
-        <div className="list-group-item d-flex flex-row justify-content-between align-items-center">
+        <div className="list-group-item d-flex flex-row justify-content-between align-items-center" style={ { borderRadius: 0 }}>
             <div>{title}</div>
             <div className="form-group my-auto">
                 <input
@@ -72,7 +69,7 @@ const Item = ({ onClick, index, title, estado, ...props }) => {
 };
 //#endregion
 
-const NestedList = ({ init = [], fill = [], onChange, ...props }) => {
+const NestedList = ({ init = [], fill = [], onChange,maxHeight, ...props }) => {
     const [loaded, setLoaded] = useState(false);
     const [data, setData] = useState(init);
 
@@ -145,7 +142,6 @@ const NestedList = ({ init = [], fill = [], onChange, ...props }) => {
         replica[index].estado = estado;
         setData(replica);
     };
-
     const onClickSub = (i, i2, state = false) => {
         const replica = [...data];
         const child = Object.assign({}, replica[i]);
@@ -159,7 +155,7 @@ const NestedList = ({ init = [], fill = [], onChange, ...props }) => {
     };
 
     return (
-        <div className="list-group">
+        <div className="list-group" style={maxHeight?{maxHeight,overflowY:"auto"}:{}}>
             {Array.isArray(data) &&
                 data.map((item, i) => {
                     return item.type == 'sub' ? (
