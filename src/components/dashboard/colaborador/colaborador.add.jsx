@@ -43,9 +43,7 @@ const Agregar = () => {
                 <div className="row">
                     <div className="col-12">
                         <form
-                            className={`needs-validation tooltip-validation ${
-                                validateClass ? 'validateClass' : ''
-                            }`}
+                            className="needs-validation tooltip-validation validateClass"
                             noValidate=""
                             onSubmit={handleSubmit(onSubmit)}
                         >

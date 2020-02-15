@@ -2,8 +2,10 @@ import {
     Home,
     File,
     Headphones,
+    User,
     Users,
-    Code
+    Code,
+    
 } from 'react-feather';
 
 export const MENUITEMS = [
@@ -23,7 +25,12 @@ export const MENUITEMS = [
         path: '/sample/samplepage', title: 'Sample Page', icon: File, type: 'link', active: false
     },
     {
-        path:'/colaborador', title:'Colaboradores', icon:Users, type:'link',active:false
+        path:'/colaborador', title:'Colaboradores', icon:User, type:'link',active:false
+    },
+    {
+        title: 'Cargos', icon: Users, type: 'sub', badgeType: 'primary', active: true, children: [
+            { path: '/cargos/agregar', title: 'Agregar', type: 'link' },
+        ]
     },
     {
         path:'/labs', title:'Lab Component', icon:Code, type:'link',active:false

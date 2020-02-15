@@ -1,21 +1,35 @@
-import {INIT_CARGO,ADD_CARGO,ADD_CARGOS,CLEAR_CARGO} from "../constant/actionTypes";
+import {
+    CARGO_CHANGE_NAME,
+    CARGOS_CARGO_PARENT,
+    CARGOS_ADD_FUNCIONES,
+    CARGOS_DEL_FUNCIONES,
+    CARGOS_PERMISOS,
+} from '../constant/actionTypes';
 
-const initial_state = [];
-
-export default (state = initial_state, action) => {
-    const {payload,type} = action;
+const init = {
+    name: '',
+    functions: [],
+    parent: {},
+    permisos: [],
+    active: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+};
+export default (state = init, action) => {
+    const { payload, type } = action;
+    const functions = state.functions;
     switch (type) {
-        case INIT_CARGO:
+        case CARGOS_ADD_FUNCIONES:
+            functions.push(payload);
+            return {...state,functions}
+        case CARGOS_DEL_FUNCIONES:
+            functions.splice(payload,1);
+            return {...state,functions};
+        case CARGOS_PERMISOS:
             if(Array.isArray(payload))
-                return [...state,...payload];
-            break;
-        case ADD_CARGO:
-            return [...state,payload];
-        case ADD_CARGOS:
-            if(Array.isArray(payload))
-                return [...state,...payload];
-            break;
-        case CLEAR_CARGO:
-        default: return [];
+                return {...state,permisos:payload};
+            return state;
+        default:
+            return state;
     }
-}
+};

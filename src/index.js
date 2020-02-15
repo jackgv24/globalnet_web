@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
 
@@ -21,17 +21,17 @@ import SignIn from './auth/signin';
 // sample page
 import Samplepage from './components/sample/samplepage';
 import {default as Lab} from './components/dashboard/componentLab';
-import { default as ColaboradorView } from './components/dashboard/colaborador/colaborador.view'
-import { default as ColaboradorAdd } from './components/dashboard/colaborador/colaborador.add'
-import { SESSION } from './constant/storeKeys';
+import { default as ColaboradorView } from './components/dashboard/colaborador/colaborador.view';
+import { default as ColaboradorAdd } from './components/dashboard/colaborador/colaborador.add';
+import { default as CargosAdd } from './components/dashboard/cargos/cargos.add';
 
 //firebase Auth
 function Root() {
     const [currentUser, setCurrentUser] = useState(true);
 
     useEffect(() => {
-        const themeColor = localStorage.getItem('theme-color');
-        const layout = localStorage.getItem('layout_version');
+        const themeColor = 'style';
+        const layout = 'light';
 
         session.onAuthStateChanged(data => {
             setCurrentUser(!!data);
@@ -58,6 +58,7 @@ function Root() {
                                         <Route path={`${process.env.PUBLIC_URL}/sample/samplepage`} component={Samplepage}/>
                                         <Route exact path={`${process.env.PUBLIC_URL}/colaborador`} component={ColaboradorView}/>
                                         <Route exact path={`${process.env.PUBLIC_URL}/colaborador/agregar`} component={ColaboradorAdd}/>
+                                        <Route exact path={`${process.env.PUBLIC_URL}/cargos/agregar`} component={CargosAdd}/>
                                         <Route exact path={`${process.env.PUBLIC_URL}/labs`} component={Lab} />
                                     </App>
                                 </Session>

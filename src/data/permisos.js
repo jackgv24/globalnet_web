@@ -1,5 +1,5 @@
 import { db } from './base';
-import { DBCARGO as dbKey } from '../constant/database';
+import { DBPERMISO as dbKey } from '../constant/database';
 
 class Cargo {
     static async getById(id){

@@ -1,7 +1,17 @@
 import { db } from './base';
-import { DBPERMISO as dbKey } from '../constant/database';
+import { DBCARGO as dbKey } from '../constant/database';
 
 class dbPermiso {
+    static async create(data){
+        try {
+            const cargoRef = db.collection(dbKey).doc();
+            await cargoRef.set(data);
+            return {success:true,message:'Se ha ingresado correctamente'}
+        } catch (error) {
+            console.error(error);
+            return {success:false,message:error.message};
+        }
+    }
     static async getById(id){
         const permisoRef = db.collection(dbKey).doc(id);
         return await permisoRef.get();

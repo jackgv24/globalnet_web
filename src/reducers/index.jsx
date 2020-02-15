@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
 import Customizer from './customizer.reducer';
-import { default as Cargo } from "./cargo.reducer";
-import { default as Permiso } from "./permiso.reducer";
+import { default as cargos } from "./cargo.reducer";
+import { default as permisos } from "./permiso.reducer";
 
 const reducers = combineReducers({
     Customizer,
-    Cargo,
-    Permiso
+    cargos,
+    permisos
 });
 
 export default reducers;
