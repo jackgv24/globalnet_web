@@ -1,9 +1,13 @@
 import { default as React, useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import useForm from 'react-hook-form';
+import { default as Select } from 'react-select';
+import { toast } from 'react-toastify';
 
-import Breadcrumb from '../../common/breadcrumb';
-import NestedList from '../../common/nestedList';
+import {default as Breadcrumb} from '../../common/breadcrumb';
+import {default as NestedList} from '../../common/nestedList';
+import {default as Modal} from '../../common/modal';
+
 
 import { default as dbPermisos } from '../../../data/permisos';
 import { default as dbCargos } from '../../../data/cargos';
@@ -26,6 +30,7 @@ const Agregar = props => {
     const [fnText, setFnText] = useState('');
     const [permisos, setPermisos] = useState([]);
     const [cargos, setCargos] = useState([]);
+    const [activeMdl,setActiveMdl] = useState(false);
 
     const addFunctions = () => {
         if (fnText.trim() != '') {
@@ -36,14 +41,30 @@ const Agregar = props => {
     const delFunctions = index => {
         dispatch({ type: CARGOS_DEL_FUNCIONES, payload: index });
     };
+
+    const onChangeParent = ({ value, label }) => {
+        dispatch({ type: CARGOS_CARGO_PARENT, payload: value });
+    };
     const onChangePermisos = data => {
         dispatch({ type: CARGOS_PERMISOS, payload: data });
     };
     const onSubmit = async (_data, event) => {
         event.preventDefault();
-        const _cargo = {...data,name:_data.name};
-        const result = await dbCargos.create(_cargo);
-        console.log(result);
+        try {
+            setActiveMdl(true);
+            const _cargo = { ...data, name: _data.name };
+            const _valName = await dbCargos.getByName(_cargo.name);
+            if (_valName) {
+                toast.error('El cargo ha ingresar se encuentra registrado');
+            } else {
+                const result = await dbCargos.create(_cargo);
+                toast.success(result.message);
+            }
+        } catch (error) {
+            toast.error('Lo sentimos ah ocurrido un error');
+            console.error(error);
+        }
+        setActiveMdl(false);
     };
 
     useEffect(() => {
@@ -61,12 +82,14 @@ const Agregar = props => {
 
     useEffect(() => {
         if (Array.isArray(data.functions)) setTodoList(data.functions);
+        console.log(data);
     }, [data]);
 
     return (
         <>
             <Breadcrumb title="Agregar Cargos" parent="Cargos" />
             <div className="container-fluid">
+                <Modal active={activeMdl}/>
                 <div className="row">
                     <div className="col-12">
                         <form className="needs-validation tooltip-validation validateClass" onSubmit={handleSubmit(onSubmit)}>
@@ -77,10 +100,6 @@ const Agregar = props => {
                                             <h5 className="font-primary">
                                                 Información General De Cargos
                                             </h5>
-                                            <span>
-                                                En esta seccion se recolecta la información del
-                                                cargo así como tambien sus funciones
-                                            </span>
                                         </div>
                                         <div className="card-body">
                                             <div className="form-row">
@@ -94,8 +113,28 @@ const Agregar = props => {
                                                         placeholder="Ingresa el nombre del cargo"
                                                         ref={register({ required: true })}
                                                     />
-                                                    {errors.name &&<span>'Nombre del cargo es requerido'</span>}
-                                                    <div className="valid-feedback">Looks good!</div>
+                                                    {errors.name && (
+                                                        <span>'Nombre del cargo es requerido'</span>
+                                                    )}
+                                                    <div className="valid-feedback">
+                                                        Looks good!
+                                                    </div>
+                                                </div>
+                                                <div className="col-12">
+                                                    <label htmlFor="cargo-superior">
+                                                        Supervisor
+                                                    </label>
+                                                    <Select
+                                                        id="cargo-superior"
+                                                        placeholder="Selecione un cargo superior"
+                                                        options={cargos.map(x => ({
+                                                            value: x,
+                                                            label: x.name,
+                                                        }))}
+                                                        onChange={onChangeParent}
+                                                        isClearable={true}
+                                                        isSearchable={true}
+                                                    />
                                                 </div>
                                                 <div className="col-12 my-3">
                                                     <hr />
@@ -112,7 +151,7 @@ const Agregar = props => {
                                                                 <div
                                                                     className="todo-list-body"
                                                                     style={{
-                                                                        minHeight: '3rem',
+                                                                        minHeight: '0rem',
                                                                         maxHeight: '12rem',
                                                                         overflowY: 'auto',
                                                                     }}

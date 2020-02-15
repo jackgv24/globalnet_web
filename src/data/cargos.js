@@ -5,6 +5,7 @@ class dbPermiso {
     static async create(data){
         try {
             const cargoRef = db.collection(dbKey).doc();
+            data.id = cargoRef.id;
             await cargoRef.set(data);
             return {success:true,message:'Se ha ingresado correctamente'}
         } catch (error) {
@@ -17,7 +18,7 @@ class dbPermiso {
         return await permisoRef.get();
     }
     static async getByName(match) {
-        const permisoRef = db.collection(dbKey).where("title","==",match).where("active","==",true);
+        const permisoRef = db.collection(dbKey).where("name","==",match).where("active","==",true);
         const data = await permisoRef.get();
         return data.empty?null:data.docs[0].data();
     }
