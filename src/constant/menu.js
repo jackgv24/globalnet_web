@@ -30,6 +30,7 @@ export const MENUITEMS = [
     {
         title: 'Cargos', icon: Users, type: 'sub', badgeType: 'primary', active: true, children: [
             { path: '/cargos/agregar', title: 'Agregar', type: 'link' },
+            { path: '/cargos/mostrar', title: 'Mostrar', type: 'link' },
         ]
     },
     {

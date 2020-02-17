@@ -13,14 +13,13 @@ import { default as dbPermisos } from '../../../data/permisos';
 import { default as dbCargos } from '../../../data/cargos';
 
 import {
-    CARGO_CHANGE_NAME,
     CARGOS_ADD_FUNCIONES,
     CARGOS_CARGO_PARENT,
     CARGOS_DEL_FUNCIONES,
     CARGOS_PERMISOS,
 } from '../../../constant/actionTypes';
 
-const Agregar = props => {
+const Modificar = ({match,...props}) => {
     const { register, handleSubmit, errors } = useForm();
     const dispatch = useDispatch();
 
@@ -68,7 +67,6 @@ const Agregar = props => {
     };
 
     useEffect(() => {
-        console.log('Fech data');
         const fetch = async () => {
             const [_cargos, _permisos] = await Promise.all([
                 dbCargos.getAll(),

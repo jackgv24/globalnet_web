@@ -24,6 +24,7 @@ import {default as Lab} from './components/dashboard/componentLab';
 import { default as ColaboradorView } from './components/dashboard/colaborador/colaborador.view';
 import { default as ColaboradorAdd } from './components/dashboard/colaborador/colaborador.add';
 import { default as CargosAdd } from './components/dashboard/cargos/cargos.add';
+import { default as CargosView } from './components/dashboard/cargos/cargos.view';
 
 //firebase Auth
 function Root() {
@@ -59,6 +60,7 @@ function Root() {
                                         <Route exact path={`${process.env.PUBLIC_URL}/colaborador`} component={ColaboradorView}/>
                                         <Route exact path={`${process.env.PUBLIC_URL}/colaborador/agregar`} component={ColaboradorAdd}/>
                                         <Route exact path={`${process.env.PUBLIC_URL}/cargos/agregar`} component={CargosAdd}/>
+                                        <Route exact path={`${process.env.PUBLIC_URL}/cargos/mostrar`} component={CargosView}/>
                                         <Route exact path={`${process.env.PUBLIC_URL}/labs`} component={Lab} />
                                     </App>
                                 </Session>
