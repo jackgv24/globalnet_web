@@ -1,7 +1,7 @@
 import { default as React, useEffect, useState } from 'react';
 
 import { default as Breadcrumb } from '../../common/breadcrumb';
-import { Table2 } from '../../common/datatable';
+import { default as Table2 } from '../../common/datatable';
 
 import { default as dbCargos } from '../../../data/cargos';
 
@@ -39,7 +39,7 @@ const View = () => {
                                 <h5 className="font-primary">Información General De Cargos</h5>
                             </div>
                             <div className="card-body">
-                                <Table2 
+                                <Table2
                                     data={cargos}
                                     class="-striped -highlight"
                                 />
