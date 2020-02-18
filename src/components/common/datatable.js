@@ -1,10 +1,10 @@
-import { default as React,useState,useEffect,Component, Fragment } from 'react';
+import { default as React,useState,useEffect,isValidElement } from 'react';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Table2 = ({data, pageSize, myClass, isEditable=false, multiSelectOption=false, pagination,...props}) => {
+const Table2 = ({data, pageSize=10, myClass, isEditable=false, multiSelectOption=false, pagination,...props}) => {
     const [checkedValues,setCheckedValues] = useState([]);
     const [myData,setMyData] = useState([]);
     const [columns,setColumns] = useState([]);
@@ -18,6 +18,8 @@ const Table2 = ({data, pageSize, myClass, isEditable=false, multiSelectOption=fa
 
         for (var key in data[0]) {
             let editable = renderEditable
+
+            if(isValidElement(data[0][key])) editable = null;
             _columns.push(
                 {
                     Header: <b>{toCapitalize(key)}</b>,
@@ -104,6 +106,13 @@ const Table2 = ({data, pageSize, myClass, isEditable=false, multiSelectOption=fa
                 data={myData}
                 columns={columns}
                 defaultPageSize={pageSize}
+                minRows={5}
+                noDataText="No hay registros"
+                nextText="Siguiente"
+                previousText="Atras"
+                rowsText="registros"
+                pageText="página"
+                ofText="de"
                 className={myClass}
                 showPagination={pagination}
             />

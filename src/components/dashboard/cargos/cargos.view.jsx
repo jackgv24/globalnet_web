@@ -7,18 +7,21 @@ import { default as dbCargos } from '../../../data/cargos';
 
 const View = () => {
     const [cargos, setCargos] = useState([]);
+    const fnIsArray = (fns) => {
+        if(!Array.isArray(fns)) return false;
+        if(fns.length<=0) return false;
+        return true;
+    }
 
     useEffect(() => {
         const fetch = async () => {
             const data = await dbCargos.getAll();
             const _cargos = data.map(x => ({
-                id: x.id,
-                name: x.name,
-                parent: x.parent.name,
-                functions: x.functions,
-                fnSize: Array.isArray(x.functions) ? x.functions.length : 0,
-                createdAt: x.createdAt.toDate(),
-                updatedAt: x.updatedAt.toDate(),
+                Nombre: x.name,
+                Supervisor: x.parent.name,
+                'Funciones':fnIsArray(x.functions)?x.functions.length:'No hay funciones',
+                'Fecha de Creacion': x.createdAt.toDate().toLocaleDateString(),
+                Activo:<i className={`fa fa-circle font-${x.active?'success':'danger'} f-12`}/>,
             }));
 
             console.log(_cargos);
