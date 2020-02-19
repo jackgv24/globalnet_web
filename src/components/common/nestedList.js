@@ -176,7 +176,7 @@ const NestedList = ({ init = [], fill = [], onChange, clear, maxHeight, ...props
         <div className="list-group" style={maxHeight ? { maxHeight, overflowY: 'auto' } : {}}>
             {Array.isArray(data) &&
                 data.map((item, i) => {
-                    return item.type == 'sub' ? (
+                    return item.type === 'sub' ? (
                         <ItemSub key={i} onClick={onClickSub} index={i} {...item} />
                     ) : (
                         <Item key={i} onClick={onClickItem} index={i} {...item} />

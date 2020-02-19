@@ -12,6 +12,12 @@ import store from './store/index';
 import App from './components/app';
 import Session from './components/common/sessionComponent';
 import { session } from './data/base';
+import { 
+    COLABORADOR_ADD,
+    CARGOS_ADD,
+    CARGOS_SHOW_ALL,
+    CARGOS_SHOW_BY_ID 
+} from "./constant/url";
 
 // Import custom Components
 
@@ -24,6 +30,7 @@ import {default as Lab} from './components/dashboard/componentLab';
 import { default as ColaboradorView } from './components/dashboard/colaborador/colaborador.view';
 import { default as ColaboradorAdd } from './components/dashboard/colaborador/colaborador.add';
 import { default as CargosAdd } from './components/dashboard/cargos/cargos.add';
+import { default as CargosHandle } from './components/dashboard/cargos/cargos.handler';
 import { default as CargosView } from './components/dashboard/cargos/cargos.view';
 
 //firebase Auth
@@ -58,9 +65,10 @@ function Root() {
                                         <Route exact path={`${process.env.PUBLIC_URL}/dashboard/default`} component={Default}/>
                                         <Route path={`${process.env.PUBLIC_URL}/sample/samplepage`} component={Samplepage}/>
                                         <Route exact path={`${process.env.PUBLIC_URL}/colaborador`} component={ColaboradorView}/>
-                                        <Route exact path={`${process.env.PUBLIC_URL}/colaborador/agregar`} component={ColaboradorAdd}/>
-                                        <Route exact path={`${process.env.PUBLIC_URL}/cargos/agregar`} component={CargosAdd}/>
-                                        <Route exact path={`${process.env.PUBLIC_URL}/cargos/mostrar`} component={CargosView}/>
+                                        <Route exact path={`${process.env.PUBLIC_URL}${COLABORADOR_ADD}`} component={ColaboradorAdd}/>
+                                        <Route exact path={`${process.env.PUBLIC_URL}${CARGOS_ADD}`} component={CargosAdd}/>
+                                        <Route exact path={`${process.env.PUBLIC_URL}${CARGOS_SHOW_ALL}`} component={CargosView}/>
+                                        <Route exact path={`${process.env.PUBLIC_URL}${CARGOS_SHOW_BY_ID}`} component={CargosHandle}/>
                                         <Route exact path={`${process.env.PUBLIC_URL}/labs`} component={Lab} />
                                     </App>
                                 </Session>
