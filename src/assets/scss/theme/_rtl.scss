@@ -310,57 +310,6 @@
         }
       }
     }
-    &.horizontal_sidebar {
-      .page-body-wrapper {
-        .page-sidebar {
-          ~ .page-body {
-            margin-right: 0;
-          }
-          .sidebar-menu {
-            > li {
-              padding: 20px 0 20px 40px;
-              > a {
-                i {
-                  &.fa.pull-right {
-                    margin-left: 0;
-                    margin-right: 10px;
-                  }
-                }
-                &:hover {
-                  padding-right: 0;
-                }
-              }
-              > .sidebar-submenu {
-                &:after {
-                  left: unset;
-                  right: 8px;
-                }
-              }
-              &:hover{
-                .sidebar-submenu{
-                  &.horizontal-child-sub{
-                    margin-right: 86%;
-                    margin-top: 0;
-                  }
-                }
-              }
-            }
-            li {
-              .sidebar-submenu {
-                margin-right: 0;
-              }
-            }
-          }
-          .main-header-left {
-            right: 0;
-            left: unset;
-          }
-        }
-      }
-      .page-main-header {
-        margin-right: 0;
-      }
-    }
   }
   .bookmark {
     ul {
@@ -2238,17 +2187,6 @@
     i {
       left: unset;
       right: 0;
-    }
-  }
-  @each $var in $alert-name {
-    $i: index($alert-name, $var);
-    .alert-#{$var}.inverse {
-      &:before {
-        border-right: 7px solid nth($alert-color, $i);
-        right: 54px;
-        left: unset;
-        border-left: unset;
-      }
     }
   }
   .alert-dismissible {

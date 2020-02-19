@@ -1,176 +1,179 @@
-import React, { Component, Fragment } from 'react';
+import { default as React, useState, useEffect, isValidElement } from 'react';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export class Datatable extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            checkedValues: [],
-            myData: this.props.myData
-        }
-    }
+const Table2 = ({
+    data,
+    pageSize = 10,
+    myClass,
+    isEditable = false,
+    multiSelectOption = false,
+    actions = [],
+    pagination,
+    ...props
+}) => {
+    const [checkedValues, setCheckedValues] = useState([]);
+    const [myData, setMyData] = useState([]);
+    const [columns, setColumns] = useState([]);
 
-    selectRow = (e, i) => {
-        if (!e.target.checked) {
-            this.setState({
-                checkedValues: this.state.checkedValues.filter((item, j) => i !== item)
+    // useEffect(()=>{
+
+    // },[data])
+
+    useEffect(() => {
+        const _columns = [];
+
+        for (var key in data[0]) {
+            let editable = renderEditable;
+            let canShow = true;
+            if (isValidElement(data[0][key])) editable = null;
+            if(typeof data[0][key] === "object"){
+                const {content,show} = data[0][key];
+                canShow = show;
+            }
+            _columns.push({
+                Header: <b>{toCapitalize(key)}</b>,
+                accessor: key,
+                Cell: editable,
+                show:canShow,
+                style: {
+                    textAlign: 'center',
+                },
             });
-        } else {
-            this.state.checkedValues.push(i);
-            this.setState({
-                checkedValues: this.state.checkedValues
-            })
         }
-    }
+        if (actions.length > 0) {
+            _columns.push({
+                Header: <b>Acciones</b>,
+                id: 'delete',
+                accessor: str => 'delete',
+                Cell: row => {
+                    console.log(row);
+                    return (
+                        <div>
+                            {actions.map((x,i) => {
+                                const { element, text, event } = x;
+                                console.log(row);
+                                return (<span key={i} onClick={()=>{if(typeof event=== "function") event(row.original,i)}}>{element}</span>)
+                            })}
+                        </div>
+                    );
+                },
+                style: {
+                    textAlign: 'center',
+                },
+                sortable: false,
+            });
+        }
+        if (multiSelectOption) {
+            _columns.push({
+                Header: (
+                    <button
+                        className="btn btn-danger btn-sm btn-delete mb-0 b-r-4"
+                        onClick={e => {
+                            if (
+                                window.confirm(
+                                    '¿Estás seguro de que deseas eliminar este artículo?',
+                                )
+                            )
+                                handleRemoveRow();
+                        }}
+                    >
+                        Delete
+                    </button>
+                ),
+                id: 'delete',
+                accessor: str => 'delete',
+                sortable: false,
+                style: {
+                    textAlign: 'center',
+                },
+                Cell: row => (
+                    <div>
+                        <span>
+                            <input
+                                type="checkbox"
+                                name={row.original.id}
+                                defaultChecked={checkedValues.includes(row.original.id)}
+                                onChange={e => selectRow(e, row.original.id)}
+                            />
+                        </span>
+                    </div>
+                ),
+                accessor: key,
+                style: {
+                    textAlign: 'center',
+                },
+            });
+        }
+        setColumns(_columns);
+        setMyData(data);
+    }, [data, multiSelectOption]);
 
-    handleRemoveRow = () => {
-        const selectedValues = this.state.checkedValues;
-        const updatedData = this.state.myData.filter(function (el) {
-            return selectedValues.indexOf(el.id) < 0;
-        });
-        this.setState({
-            myData: updatedData
-        })
-        toast.success("Successfully Deleted !")
+    const selectRow = (e, i) => {
+        if (!e.target.checked) {
+            const _checked = checkedValues.filter((item, j) => i !== item);
+            setCheckedValues(_checked);
+        } else {
+            setCheckedValues([...checkedValues, i]);
+        }
     };
+    const handleRemoveRow = () => {
+        const selectedValues = checkedValues;
+        const updatedData = myData.filter(x => {
+            return selectedValues.indexOf(x.id) < 0;
+        });
+        setMyData(updatedData);
+        toast.success('Eliminado exitosamente !');
+    };
+    const renderEditable = cellInfo => {
+        const onBlur = e => {
+            const _data = Array.from(data);
+            _data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+            setMyData(_data);
+        };
+        let i = data[cellInfo.index][cellInfo.column.id];
+        if(typeof i === "object"){
+            const {content} = Object.assign({},i);
+            i = content;
+        } 
 
-    renderEditable = (cellInfo) => {
         return (
             <div
-                style={{ backgroundColor: "#fafafa" }}
-                contentEditable
+                style={{ backgroundColor: '#fafafa' }}
+                contentEditable={isEditable}
                 suppressContentEditableWarning
-                onBlur={e => {
-                    const data = [...this.state.myData];
-                    data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-                    this.setState({ myData: data });
-                }}
+                onBlur={onBlur}
                 dangerouslySetInnerHTML={{
-                    __html: this.state.myData[cellInfo.index][cellInfo.column.id]
+                    __html: data[cellInfo.index][cellInfo.column.id],
                 }}
             />
         );
-    }
-
-    Capitalize(str) {
+    };
+    const toCapitalize = str => {
         return str.charAt(0).toUpperCase() + str.slice(1);
-    }
+    };
 
-    render() {
-        const { pageSize, myClass, multiSelectOption, pagination } = this.props;
-        const { myData } = this.state
+    return (
+        <>
+            <ReactTable
+                data={myData}
+                columns={columns}
+                defaultPageSize={pageSize}
+                minRows={5}
+                noDataText="No hay registros"
+                nextText="Siguiente"
+                previousText="Atras"
+                rowsText="registros"
+                pageText="página"
+                ofText="de"
+                className={myClass}
+                showPagination={pagination}
+            />
+            <ToastContainer />
+        </>
+    );
+};
 
-        const columns = [];
-        for (var key in myData[0]) {
-
-            let editable = this.renderEditable
-            if (key === "image") {
-                editable = null;
-            }
-            if (key === "status") {
-                editable = null;
-            }
-            if (key === "avtar") {
-                editable = null;
-            }
-            if (key === "vendor") {
-                editable = null;
-            }
-            if (key === "skill") {
-                editable = null;
-            }
-            if (key === "user") {
-                editable = null;
-            }
-
-            columns.push(
-                {
-                    Header: <b>{this.Capitalize(key.toString())}</b>,
-                    accessor: key,
-                    Cell: editable,
-                    style: {
-                        textAlign: 'center'
-                    }
-                });
-        }
-
-        if (multiSelectOption === true) {
-            columns.push(
-                {
-                    Header: <button className="btn btn-danger btn-sm btn-delete mb-0 b-r-4"
-                        onClick={
-                            (e) => {
-                                if (window.confirm('Are you sure you wish to delete this item?'))
-                                    this.handleRemoveRow()
-                            }}>Delete</button>,
-                    id: 'delete',
-                    accessor: str => "delete",
-                    sortable: false,
-                    style: {
-                        textAlign: 'center'
-                    },
-                    Cell: (row) => (
-                        <div>
-                            <span >
-                                <input type="checkbox" name={row.original.id} defaultChecked={this.state.checkedValues.includes(row.original.id)}
-                                    onChange={e => this.selectRow(e, row.original.id)} />
-                            </span>
-                        </div>
-                    ),
-                    accessor: key,
-                    style: {
-                        textAlign: 'center'
-                    }
-                }
-            )
-        } else {
-            columns.push(
-                {
-                    Header: <b>Action</b>,
-                    id: 'delete',
-                    accessor: str => "delete",
-                    Cell: (row) => (
-                        <div>
-                            <span onClick={() => {
-                                if (window.confirm('Are you sure you wish to delete this item?')) {
-                                    let data = myData;
-                                    data.splice(row.index, 1);
-                                    this.setState({ myData: data });
-                                }
-                                toast.success("Successfully Deleted !")
-
-                            }}>
-                                <i className="fa fa-trash" style={{ width: 35, fontSize: 16, padding: 11, color: '#e4566e' }}
-                                ></i>
-                            </span>
-
-                            <span><i className="fa fa-pencil" style={{ width: 35, fontSize: 16, padding: 11, color: 'rgb(40, 167, 69)' }}></i></span>
-                        </div>
-                    ),
-                    style: {
-                        textAlign: 'center'
-                    },
-                    sortable: false
-                }
-            )
-        }
-
-        return (
-            <Fragment>
-                <ReactTable
-                    data={myData}
-                    columns={columns}
-                    defaultPageSize={pageSize}
-                    className={myClass}
-                    showPagination={pagination}
-                />
-                <ToastContainer />
-            </Fragment>
-        )
-    }
-}
-
-export default Datatable;
+export default Table2;

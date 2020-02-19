@@ -148,7 +148,7 @@ const Bookmark = () => {
                             })}
 
                         <li>
-                            <a href="#" onClick={removeOffcanvas}>
+                            <a href="#javascript" onClick={removeOffcanvas}>
                                 <Star className="bookmark-search" />
                             </a>
                             <form className="form-inline search-form">
@@ -174,7 +174,7 @@ const Bookmark = () => {
                                                                     {data.title}
                                                                 </Link>
                                                                 <span className="pull-right">
-                                                                    <a href="#">
+                                                                    <a href="#javascript">
                                                                         <i className="fa fa-star-o mt-1 icon-star" onClick={(e) => addToBookmark(e, data)}></i>
                                                                     </a>
                                                                 </span>

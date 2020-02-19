@@ -18,7 +18,7 @@ const Notification = props => {
                     <li>
                         <div className="media">
                             <div className="media-body">
-                                <h6 className="mt-0 txt-success"><span><Download className="font-success"/></span>Download Complete</h6>
+                                <h6 className="mt-0 txt-success"><span><Download /></span>Download Complete</h6>
                                 <p className="mb-0">Lorem ipsum dolor sit amet, consectetuer.</p>
                             </div>
                         </div>
@@ -26,7 +26,7 @@ const Notification = props => {
                     <li>
                         <div className="media">
                             <div className="media-body">
-                                <h6 className="mt-0 txt-danger"><span><AlertCircle className="font-danger"/></span>250 MB trash files</h6>
+                                <h6 className="mt-0 txt-danger"><span><AlertCircle /></span>250 MB trash files</h6>
                                 <p className="mb-0">Lorem ipsum dolor sit amet, consectetuer.</p>
                             </div>
                         </div>

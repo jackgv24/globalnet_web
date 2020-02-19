@@ -564,19 +564,6 @@
 }
 /* ========= responsive scss for 1366 screen ========= */
 @media only screen and (max-width: 1366px) {
-  .right-sidebar {
-    .chat-box  {
-      .people-list {
-        ul {
-          li {
-            .status-circle {
-              left: 40px;
-            }
-          }
-        }
-      }
-    }
-  }
   //landing css
   .landing-center{
     .img-wave2-set{
@@ -970,7 +957,7 @@
   }
   .status-circle{
     top:25px;
-    left:22px;
+    left:40px !important;
   }
   // mega-menu
   .mega-menu {
@@ -2377,7 +2364,7 @@
       top: -6px;
     }
   }
-  @each $border-tab-name, $border-tab-color in (primary, $primary-color ),
+  @each $border-tab-name, $border-tab-color in (primary, $primary-color),
         (secondary, $secondary-color) ,
         (success, $success-color),
         (danger, $danger-color),
@@ -2545,7 +2532,7 @@
             align-items: center;
             svg{
               circle{
-                color: $primary-color ;
+                color: $primary-color;
               }
             }
           }
@@ -2581,10 +2568,10 @@
 
     .page-body-wrapper {
       .page-sidebar {
-        top: 60px;
-        height: calc(100vh - 60px);
+        top: 60px !important;
+        height: calc(100vh - 60px) !important;
         ~ .page-body{
-          margin-left:0px;
+          margin-left:0px !important;
         }
       }
       .page-sidebar-open{
@@ -3186,14 +3173,14 @@
   }
   .document {
     .page-main-header {
-      background-color: $primary-color ;
+      background-color: $primary-color;
       .document-right-nav {
         .navbar {
           .navbar-collapse {
             .navbar-nav {
               .nav-item {
                 .nav-link {
-                  color: $primary-color  !important;
+                  color: $primary-color !important;
                 }
               }
             }
@@ -3917,7 +3904,7 @@
       position: relative;
       padding-top: 6px;
     }
-    @each $border-tab-name, $border-tab-color in (primary, $primary-color ),
+    @each $border-tab-name, $border-tab-color in (primary, $primary-color),
         (secondary, $secondary-color) ,
         (success, $success-color),
         (danger, $danger-color),
@@ -4703,7 +4690,7 @@
       left: 0;
     }
   }
-  @each $border-tab-name, $border-tab-color in (primary, $primary-color ),
+  @each $border-tab-name, $border-tab-color in (primary, $primary-color),
         (secondary, $secondary-color) ,
         (success, $success-color),
         (danger, $danger-color),
@@ -4955,7 +4942,7 @@
             .search-form {
               .mobile-search {
                 svg{
-                  color: $primary-color ;
+                  color: $primary-color;
                 }
               }
               .form-control-plaintext {
@@ -5006,7 +4993,7 @@
   info,
   light,
   dark;
-  $alert-color: $primary-color ,
+  $alert-color: $primary-color,
   $secondary-color,
   $success-color,
   $danger-color,

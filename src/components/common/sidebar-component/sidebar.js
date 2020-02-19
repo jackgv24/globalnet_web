@@ -1,54 +1,25 @@
-import React, { Fragment, useState, useEffect, useLayoutEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import logo from '../../../assets/images/endless-logo.png';
 import logo_compact from '../../../assets/images/logo/compact-logo.png';
-import { useSelector } from 'react-redux';
-import { useLocation } from "react-router";
 
 import UserPanel from './userPanel';
 import { MENUITEMS } from '../../../constant/menu';
 import { Link } from 'react-router-dom';
 import { translate } from 'react-switch-lang';
-
-function useWindowSize(wrapper) {
-    const [size, setSize] = useState([0, 0]);
-
-    useLayoutEffect(() => {
-        function updateSize() {
-            setSize([window.innerWidth, window.innerHeight]);
-        }
-        window.addEventListener('resize', updateSize);
-        updateSize();
-        return () => window.removeEventListener('resize', updateSize);
-    }, []);
-
-    if (wrapper === "horizontal_sidebar") {
-        if (size[0] > 100 && size[0] < 991) {
-            document.querySelector(".page-wrapper").className = 'page-wrapper default';
-            document.querySelector(".page-body-wrapper").className = 'page-body-wrapper default';
-        } else {
-            document.querySelector(".page-wrapper").className = 'page-wrapper horizontal_sidebar';
-            document.querySelector(".page-body-wrapper").className = 'page-body-wrapper horizontal_sidebar';
-        }
-
-    }
-
-    return size;
-}
-
 const Sidebar = (props) => {
     const [margin, setMargin] = useState(0);
+    const [width, setWidth] = useState(0);
     const [hideRightArrow, setHideRightArrow] = useState(false);
     const [hideLeftArrow, setHideLeftArrow] = useState(true);
     const [mainmenu, setMainMenu] = useState(MENUITEMS);
-    const [hideLeftArrowRTL, setHideLeftArrowRTL] = useState(false);
-    const [hideRightArrowRTL, setHideRightArrowRTL] = useState(true);
-    const configDB = useSelector(content => content.Customizer.sidebar_types);
-    const layout = useSelector(content => content.Customizer.layout);
-    const [width, height] = useWindowSize(configDB.wrapper);
-    let location = useLocation();
 
     useEffect(() => {
-        const currentUrl = location.pathname;
+
+        window.addEventListener('resize', handleResize)
+        handleResize();
+
+        var currentUrl = window.location.pathname;
+
         mainmenu.filter(items => {
             if (items.path === currentUrl)
                 setNavActive(items)
@@ -63,8 +34,16 @@ const Sidebar = (props) => {
                 })
             })
         })
+
+        return () => {
+            window.addEventListener('resize', handleResize)
+        }
+
     }, []);
 
+    const handleResize = () => {
+        setWidth(window.innerWidth - 310);
+    }
 
     const setNavActive = (item) => {
         MENUITEMS.filter(menuItem => {
@@ -111,6 +90,7 @@ const Sidebar = (props) => {
     }
 
     const scrollToRight = () => {
+
         const elmnt = document.getElementById("myDIV");
         const menuWidth = elmnt.offsetWidth;
         const temp = menuWidth + margin
@@ -138,37 +118,12 @@ const Sidebar = (props) => {
         }
     }
 
-    const scrollToLeftRTL = () => {
-        if (margin <= -width) {
-            setMargin(margin => margin += -width);
-            setHideLeftArrowRTL(true);
-        }
-        else {
-            setMargin(margin => margin += -width);
-            setHideRightArrowRTL(false);
-        }
-    }
-
-    const scrollToRightRTL = () => {
-        const temp = width + margin
-        // Checking condition for remaing margin
-        if (temp === 0) {
-            setMargin(temp);
-            setHideRightArrowRTL(true);
-        }
-        else {
-            setMargin(margin => margin += width);
-            setHideRightArrowRTL(false);
-            setHideLeftArrowRTL(false);
-        }
-    }
-
     return (
         <Fragment>
             <div className="page-sidebar">
                 <div className="main-header-left d-none d-lg-block">
                     <div className="logo-wrapper compactLogo">
-                        <Link to={`${process.env.PUBLIC_URL}/dashboard/default`}>
+                        <Link to="/dashboard/default">
                             <img className="blur-up lazyloaded" src={logo_compact} alt="" />
                             <img className="blur-up lazyloaded" src={logo} alt="" />
                         </Link>
@@ -179,11 +134,9 @@ const Sidebar = (props) => {
                     <ul
                         className="sidebar-menu"
                         id="myDIV"
-                        style={configDB.wrapper === 'horizontal_sidebar' ? layout === 'rtl' ?
-                            { 'marginRight': margin + 'px' } : { 'marginLeft': margin + 'px' } : { margin: '0px' }}
+                        style={{ 'marginLeft': margin + 'px' }}
                     >
-                        <li className={`left-arrow ${layout == 'rtl' ? hideLeftArrowRTL ? 'd-none' : 'hideLeftArrowRTL' : hideLeftArrow ? 'd-none' : 'hideLeftArrow'}`}
-                            onClick={(configDB.wrapper === 'horizontal_sidebar' && layout === 'rtl') ? scrollToLeftRTL : scrollToLeft}><i className="fa fa-angle-left"></i></li>
+                        <li className={`left-arrow ${hideLeftArrow ? 'd-none' : 'hideLeftArrow'}`} onClick={scrollToLeft}><i className="fa fa-angle-left"></i></li>
                         {
                             MENUITEMS.map((menuItem, i) =>
                                 <li className={`${menuItem.active ? 'active' : ''}`} key={i}>
@@ -252,8 +205,7 @@ const Sidebar = (props) => {
                                 </li>
                             )
                         }
-                        <li className={`right-arrow ${layout == 'rtl' ? hideRightArrowRTL ? 'd-none' : 'hideRightArrowRTL' : hideRightArrow ? 'd-none' : 'hideRightArrow'}`}
-                            onClick={(configDB.wrapper == 'horizontal_sidebar' && layout == 'rtl') ? scrollToRightRTL : scrollToRight}><i className="fa fa-angle-right"></i></li>
+                        <li className={`right-arrow ${hideRightArrow ? 'd-none' : 'hideRightArrow'}`} onClick={scrollToRight}><i className="fa fa-angle-right"></i></li>
                     </ul>
                 </div>
             </div>
