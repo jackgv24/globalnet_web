@@ -96,7 +96,7 @@ const Agregar = props => {
                     <div className="col-12">
                         <form className="needs-validation tooltip-validation validateClass" onSubmit={handleSubmit(onSubmit)}>
                             <div className="row">
-                                <div className="col-12 col-md-6 col-xl-4">
+                                <div className="col-12 col-lg-10">
                                     <div className="card">
                                         <div className="card-header">
                                             <h5 className="font-primary">
@@ -104,8 +104,10 @@ const Agregar = props => {
                                             </h5>
                                         </div>
                                         <div className="card-body">
-                                            <div className="form-row">
-                                                <div className="col-12 mb-3">
+                                            <div className="row">
+                                                <div className="col-6">
+                                                    <div className="form row">
+                                                        <div className="col-12 mb-3">
                                                     <label htmlFor="name">Cargo</label>
                                                     <input
                                                         className="form-control"
@@ -122,7 +124,7 @@ const Agregar = props => {
                                                         Looks good!
                                                     </div>
                                                 </div>
-                                                <div className="col-12">
+                                                        <div className="col-12">
                                                     <label htmlFor="cargo-superior">
                                                         Supervisor
                                                     </label>
@@ -138,7 +140,7 @@ const Agregar = props => {
                                                         isSearchable={true}
                                                     />
                                                 </div>
-                                                <div className="col-12 my-3">
+                                                        <div className="col-12 my-3">
                                                     <hr />
                                                     <h6 className="text-primary">
                                                         Funciones de un cargo
@@ -243,27 +245,20 @@ const Agregar = props => {
                                                         </div>
                                                     </div>
                                                 </div>
+                                                    </div>
+                                                </div>
+                                                <div className="col-6">
+                                                    <NestedList
+                                                        init={permisos}
+                                                        onChange={onChangePermisos}
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="card-footer">
                                             <button className="btn btn-primary mr-1" type="submit">
                                                 Agregar
                                             </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-12 col-md-6 col-xl-5">
-                                    <div className="card">
-                                        <div className="card-header">
-                                            <h5 className="font-primary">
-                                                Funciones de los cargos
-                                            </h5>
-                                        </div>
-                                        <div className="card-body">
-                                            <NestedList
-                                                init={permisos}
-                                                onChange={onChangePermisos}
-                                            />
                                         </div>
                                     </div>
                                 </div>
