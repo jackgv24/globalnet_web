@@ -11,6 +11,8 @@ import {default as Modal} from '../../common/modal';
 
 import { default as dbPermisos } from '../../../data/permisos';
 import { default as dbCargos } from '../../../data/cargos';
+import {CARGOS_SHOW_ALL} from '../../../constant/url'
+
 
 import {
     CARGO_CHANGE_NAME,
@@ -87,7 +89,7 @@ const Agregar = props => {
 
     return (
         <>
-            <Breadcrumb title="Agregar Cargos" parent="Cargos" />
+            <Breadcrumb title="Agregar Cargos" parent="Cargos" url={CARGOS_SHOW_ALL}/>
             <div className="container-fluid">
                 <Modal active={activeMdl}/>
                 <div className="row">
