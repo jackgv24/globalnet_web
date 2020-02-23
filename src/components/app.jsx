@@ -11,7 +11,7 @@ import Loader from './common/loader';
 const AppLayout = ({children}) => {
         return (
             <div>
-                <Loader />
+                <Loader timeOut={1000}/>
                 <div className="page-wrapper">
                     <div className="page-body-wrapper">
                         <Header />

@@ -29,7 +29,7 @@ const Table2 = ({
             let editable = renderEditable;
             let canShow = true;
             if (isValidElement(data[0][key])) editable = null;
-            if(typeof data[0][key] === "object"){
+            else if(typeof data[0][key] === "object"){
                 const {content,show} = data[0][key];
                 canShow = show;
             }
