@@ -44,7 +44,8 @@ const Agregar = props => {
         dispatch({ type: CARGOS_DEL_FUNCIONES, payload: index });
     };
 
-    const onChangeParent = ({ value, label }) => {
+    const onChangeParent = (parent) => {
+        const {value=null} = parent || {};
         dispatch({ type: CARGOS_CARGO_PARENT, payload: value });
     };
     const onChangePermisos = data => {
@@ -248,10 +249,9 @@ const Agregar = props => {
                                                     </div>
                                                 </div>
                                                 <div className="col-6">
-                                                    <NestedList
-                                                        init={permisos}
-                                                        onChange={onChangePermisos}
-                                                    />
+                                                    <div>
+                                                        <NestedList init={permisos} onChange={onChangePermisos}/>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

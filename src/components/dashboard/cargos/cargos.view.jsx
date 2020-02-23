@@ -21,9 +21,9 @@ const View = ({ history }) => {
             const _cargos = data.map(x => ({
                 id:{content:x.id,show:false},
                 Nombre: x.name,
-                Supervisor: x.parent.name,
+                Supervisor: x.parent? x.parent.name :'',
                 'Funciones':fnIsArray(x.functions)?x.functions.length:'No hay funciones',
-                'Fecha de Creacion': x.createdAt.toDate().toLocaleDateString(),
+                'Fecha de Creacion': x.createdAt? x.createdAt.toDate().toLocaleDateString():'No hay fecha de registro',
                 Activo:<i className={`fa fa-circle font-${x.active?'success':'danger'} f-12`}/>,
             }));
 
