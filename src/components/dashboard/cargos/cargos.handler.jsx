@@ -1,8 +1,9 @@
-import { default as React, useState, useEffect } from 'react';
+import { default as React, useState, useEffect, Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import useForm from 'react-hook-form';
 import { withRouter } from 'react-router';
 import { default as Select } from 'react-select';
+import { default as Swal } from 'sweetalert2';
 
 import { toast } from 'react-toastify';
 
@@ -21,14 +22,16 @@ import {
     CARGOS_DEL_FUNCIONES,
     CARGOS_PERMISOS,
     CARGO_CHANGE_NAME,
+    CARGOS_STATUS,
 } from '../../../constant/actionTypes';
 
 //TODO: hay una mejor forma de hacer este componente
-const Handler = ({ history, match, action='update'}) => {
+const Handler = ({ history, match, action = 'update' }) => {
     const { handleSubmit, errors } = useForm();
     const dispatch = useDispatch();
 
     const data = useSelector(state => state.cargos);
+    const [backup, setBackup] = useState(null);
     const [todoList, setTodoList] = useState([]);
     const [fnText, setFnText] = useState('');
     const [permisos, setPermisos] = useState([]);
@@ -52,6 +55,24 @@ const Handler = ({ history, match, action='update'}) => {
     //#endregion
 
     //#region Event
+    const onClickWantUpdate = async () => {
+        Swal.fire({
+            title: '¿Deseas editar el registro?',
+            text: 'Recuerda que al modificar el registro, los cambios seran permanentes',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Vamos',
+            confirmButtonColor: '#007bff',
+            cancelButtonColor: '#ff5370',
+            cancelButtonText: 'No',
+        }).then(({ value }) => {
+            if (value) setCanWrite(true);
+        });
+    };
+    const onClickReset = async () => {
+        setCanWrite(false);
+        dispatch({ type: CARGOS_INIT, payload: backup });
+    };
     const onChangeName = event => {
         if (canWrite) {
             dispatch({ type: CARGO_CHANGE_NAME, payload: event.currentTarget.value.trim() });
@@ -70,13 +91,15 @@ const Handler = ({ history, match, action='update'}) => {
         try {
             setLoader(true);
             console.log(data);
-            const _valName = (await dbCargos.getAll()).find(x=>x.id !==data.id && x.name ===data.name);
-            // if (_valName) {
-            //     toast.error('El cargo ha ingresar se encuentra registrado');
-            // } else {
-            //     const result = await dbCargos.updateById(data.id,data);
-            //     toast.success(result.message);
-            // }
+            const _valName = (await dbCargos.getAll()).find(
+                x => x.id !== data.id && x.name === data.name,
+            );
+            if (_valName) {
+                toast.error('El cargo ha ingresar se encuentra registrado');
+            } else {
+                const result = await dbCargos.updateById(data.id, data);
+                toast.success(result.message);
+            }
         } catch (error) {
             toast.error('Lo sentimos ah ocurrido un error');
             console.error(error);
@@ -95,10 +118,13 @@ const Handler = ({ history, match, action='update'}) => {
             ]);
             if (Array.isArray(_permisos)) setPermisos(_permisos);
             if (Array.isArray(_cargos)) setCargos(_cargos);
-            if (_data.exists) dispatch({ type: CARGOS_INIT, payload: _data.data() });
+            if (_data.exists) {
+                const _result = _data.data();
+                setBackup(_result);
+                dispatch({ type: CARGOS_INIT, payload: _result });
+            }
         };
         fetch();
-        if(action==='update') setCanWrite(true);
     }, []);
 
     useEffect(() => {
@@ -114,7 +140,7 @@ const Handler = ({ history, match, action='update'}) => {
             {/* <Loader show={loader} /> */}
             <Breadcrumb parent="Cargos" childTitle={data.id} url={CARGOS_SHOW_ALL} />
             <div className="container-fluid">
-                <Modal active={loader}/>
+                <Modal active={loader} />
                 <div className="row">
                     <div className="col-12">
                         <form
@@ -124,10 +150,21 @@ const Handler = ({ history, match, action='update'}) => {
                             <div className="row">
                                 <div className="col-12 col-lg-10">
                                     <div className="card">
-                                        <div className="card-header">
+                                        <div className="card-header d-flex justify-content-between">
                                             <h5 className="font-primary">
                                                 Información General De Cargos
                                             </h5>
+                                            <span hidden={canWrite} className="text-secondary">
+                                                ¿Deseas{' '}
+                                                <a
+                                                    href="#"
+                                                    onClick={onClickWantUpdate}
+                                                    className="text-dark font-weight-bold"
+                                                >
+                                                    modificar
+                                                </a>{' '}
+                                                el registro?
+                                            </span>
                                         </div>
                                         <div className="card-body">
                                             <div className="row">
@@ -147,14 +184,14 @@ const Handler = ({ history, match, action='update'}) => {
                                                             />
                                                             {errors.name && (
                                                                 <span>
-                                                                    'Nombre del cargo es requerido'
+                                                                    Nombre del cargo es requerido
                                                                 </span>
                                                             )}
                                                             <div className="valid-feedback">
                                                                 Looks good!
                                                             </div>
                                                         </div>
-                                                        <div className="col-12">
+                                                        <div className="col-12 mb-3">
                                                             <label htmlFor="cargo-superior">
                                                                 Supervisor
                                                             </label>
@@ -175,12 +212,31 @@ const Handler = ({ history, match, action='update'}) => {
                                                                 isDisabled={!canWrite}
                                                             />
                                                         </div>
+                                                        <div className="col-12">
+                                                            <div className="checkbox">
+                                                                <input
+                                                                    id="dafault-checkbox"
+                                                                    type="checkbox"
+                                                                    checked={data.active}
+                                                                    onChange={(event)=>{
+                                                                        if(canWrite)dispatch({type:CARGOS_STATUS,payload:event.currentTarget.checked})
+                                                                    }}
+                                                                    readOnly={canWrite}
+                                                                />
+                                                                <label
+                                                                    className="mb-0"
+                                                                    htmlFor="dafault-checkbox"
+                                                                >
+                                                                    El estado actual del cargo es {data.active?<span className="text-success">activo</span>:<span className="text-danger">inactivo</span>}
+                                                                </label>
+                                                            </div>
+                                                        </div>
                                                         <div className="col-12 my-3">
                                                             <hr />
-                                                            <h6 className="text-primary">
+                                                            <h6 className="text-dark">
                                                                 Funciones de un cargo
                                                             </h6>
-                                                            <small>
+                                                            <small className="text-black-50">
                                                                 Listado de funciones que debe
                                                                 realizar un cargo
                                                             </small>
@@ -296,10 +352,10 @@ const Handler = ({ history, match, action='update'}) => {
                                                 </div>
                                                 <div className="col-12 col-md-6">
                                                     <div className="mb-3">
-                                                        <h6 className="text-primary">
+                                                        <h6 className="text-dark">
                                                             Permisos de un cargo
                                                         </h6>
-                                                        <small>
+                                                        <small className="text-black-50">
                                                             Lista de permisos que tiene o tendrá
                                                             acceso el cargo, no de manera estricta
                                                             los permisos que usted le asigne acá
@@ -318,6 +374,13 @@ const Handler = ({ history, match, action='update'}) => {
                                         <div className="card-footer" hidden={!canWrite}>
                                             <button className="btn btn-primary mr-1" type="submit">
                                                 Actualizar
+                                            </button>
+                                            <button
+                                                className="btn btn-danger mr-1"
+                                                type="reset"
+                                                onClick={onClickReset}
+                                            >
+                                                Cancelar
                                             </button>
                                         </div>
                                     </div>

@@ -4,7 +4,8 @@ import {
     CARGOS_DEL_FUNCIONES,
     CARGOS_PERMISOS,
     CARGOS_INIT,
-    CARGO_CHANGE_NAME
+    CARGO_CHANGE_NAME,
+    CARGOS_STATUS
 } from '../constant/actionTypes';
 
 const init = {
@@ -20,6 +21,8 @@ const init = {
 export default (state = init, action) => {
     const { payload, type } = action;
     switch (type) {
+        case CARGOS_STATUS:
+            return {...state,active:!!payload};
         case CARGO_CHANGE_NAME:
             return {
                 ...state,

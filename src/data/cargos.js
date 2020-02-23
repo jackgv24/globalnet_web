@@ -21,12 +21,11 @@ class dbPermiso {
         const cargoRef = db
             .collection(dbKey)
             .where('name', '==', match)
-            .where('active', '==', true);
         const data = await cargoRef.get();
         return data.empty ? null : data.docs[0].data();
     }
     static async getAll() {
-        const cargoRef = db.collection(dbKey).where('active', '==', true);
+        const cargoRef = db.collection(dbKey);
         const data = await cargoRef.get();
         return data.empty ? [] : data.docs.map(x => (x.exists ? x.data() : null)).filter(x => !!x);
     }
