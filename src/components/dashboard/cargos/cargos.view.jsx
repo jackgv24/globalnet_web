@@ -27,7 +27,7 @@ const View = ({ history }) => {
                 Activo:<i className={`fa fa-circle font-${x.active?'success':'danger'} f-12`}/>,
             }));
 
-            if (Array.isArray) setCargos(_cargos);
+            if (Array.isArray(_cargos)) setCargos(_cargos);
         };
         fetch();
     }, []);

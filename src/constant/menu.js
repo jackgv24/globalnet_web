@@ -25,7 +25,10 @@ export const MENUITEMS = [
         path: '/sample/samplepage', title: 'Sample Page', icon: File, type: 'link', active: false
     },
     {
-        path:'/colaborador', title:'Colaboradores', icon:User, type:'link',active:false
+        title: 'Colaborador', icon: User, type: 'sub', badgeType: 'primary', active: true, children: [
+            { path: '/colaborador/agregar', title: 'Agregar', type: 'link' },
+            { path: '/colaborador', title: 'Mostrar', type: 'link' },
+        ]
     },
     {
         title: 'Cargos', icon: Users, type: 'sub', badgeType: 'primary', active: true, children: [

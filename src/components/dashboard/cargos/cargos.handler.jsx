@@ -130,7 +130,10 @@ const Handler = ({ history, match, action = 'update' }) => {
     useEffect(() => {
         if (Array.isArray(data.functions)) setTodoList(data.functions);
         if (Array.isArray(data.permisos))
-            if (data.permisos.length > 0) setInitPermisos(data.permisos);
+            if (data.permisos.length > 0) {
+                console.log(data.permisos);
+                setInitPermisos(data.permisos);
+            }
         if (data.parent) setParent({ value: data.parent, label: data.parent.name });
     }, [data]);
     //#endregion
@@ -150,7 +153,7 @@ const Handler = ({ history, match, action = 'update' }) => {
                             <div className="row">
                                 <div className="col-12 col-lg-10">
                                     <div className="card">
-                                        <div className="card-header d-flex justify-content-between">
+                                        <div className="card-header d-flex justify-content-start justify-content-md-between flex-column flex-md-row">
                                             <h5 className="font-primary">
                                                 Información General De Cargos
                                             </h5>

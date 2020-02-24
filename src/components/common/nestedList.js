@@ -96,6 +96,7 @@ const NestedList = ({ init = [], fill = [], readOnly=false, onChange, clear, max
 
     useEffect(()=>{
         if (loaded && !loadedFill && fill.length > 0) {
+            console.log('El fill ha cambiado');
             const replica = Array.from(data);
             for (const item of fill) {
                 const fatherId = replica.findIndex(x => x.id === item.id);

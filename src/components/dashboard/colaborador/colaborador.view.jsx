@@ -1,26 +1,65 @@
-import {default as React, Fragment } from 'react';
-import Breadcrumb from '../../common/breadcrumb';
+import { default as React, useEffect, useState } from 'react';
+import { withRouter } from 'react-router';
 
-const ColaboradorVista = () => {
-  return (
-    <Fragment>
-      <Breadcrumb title="Colaborador" parent="Dashboard" />
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-sm-12">
-            <div className="card">
-              <div className="card-header">
-                <h5>Vista de Colaboradores</h5>
-              </div>
-              <div className="card-body">
-                <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
-              </div>
+import { default as Breadcrumb } from '../../common/breadcrumb';
+import { default as Table2 } from '../../common/datatable';
+
+import { default as dbColaborador } from '../../../data/colaborador';
+import { COLABORADOR_SHOW_BY_ID } from '../../../constant/url'
+
+const View = ({ history }) => {
+    const [colaborador, setColaborador] = useState([]);
+    const fnIsArray = (fns) => {
+        if(!Array.isArray(fns)) return false;
+        if(fns.length<=0) return false;
+        return true;
+    }
+
+    useEffect(() => {
+        const fetch = async () => {
+            const data = await dbColaborador.getAll();
+            const _colaboradores = data.map(x=>({
+                id:{content:x.id,show:false}
+
+            }));
+        };
+        fetch();
+    }, []);
+
+    const view = (data) => {
+        const url = `${process.env.PUBLIC_URL}${COLABORADOR_SHOW_BY_ID.replace(':id',data.id.content)}`;
+        history.push(url);
+    }
+
+    return (
+        <>
+            <Breadcrumb title="Mostrar" parent="Cargos" />
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-12">
+                        <div className="card">
+                            <div className="card-header">
+                                <h5 className="font-primary">Información General De Colaboradores</h5>
+                            </div>
+                            <div className="card-body">
+                                <Table2
+                                    data={colaborador}
+                                    class="-striped -highlight"
+                                    actions={
+                                        [{
+                                            element:<div className="btn btn-sm btn-info p-0"><i className="fa fa-eye" style={{ fontSize: '14px', color: '#FFF',margin:'1.5px' }}></i></div>,
+                                            event:view,
+                                            label:'test'
+                                        }]
+                                    }
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </Fragment>
-  );
+        </>
+    );
 };
 
-export default ColaboradorVista;
+export default withRouter(View);
