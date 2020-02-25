@@ -119,7 +119,7 @@ const Handler = ({ history, match, action = 'update' }) => {
             if (Array.isArray(_permisos)) setPermisos(_permisos);
             if (Array.isArray(_cargos)) setCargos(_cargos);
             if (_data.exists) {
-                const _result = _data.data();
+                const _result = Object.assign({},_data.data());
                 setBackup(_result);
                 dispatch({ type: CARGOS_INIT, payload: _result });
             }

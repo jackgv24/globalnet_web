@@ -210,16 +210,16 @@ const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, ma
                                 key={i}
                                 onClick={onClickSub}
                                 index={i}
-                                {...item}
                                 readOnly={!readOnly}
+                                {...item}
                             />
                         ) : (
                             <Item
                                 key={i}
                                 onClick={onClickItem}
                                 index={i}
-                                {...item}
                                 readOnly={!readOnly}
+                                {...item}
                             />
                         );
                     })}
