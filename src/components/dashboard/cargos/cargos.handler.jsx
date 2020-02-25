@@ -364,7 +364,7 @@ const Handler = ({ history, match, action = 'update' }) => {
                                                     </div>
                                                     <NestedList
                                                         init={permisos}
-                                                        fill={initPermisos}
+                                                        value={data.permisos}
                                                         onChange={onChangePermisos}
                                                         readOnly={!canWrite}
                                                     />

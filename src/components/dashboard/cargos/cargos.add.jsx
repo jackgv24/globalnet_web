@@ -250,7 +250,7 @@ const Agregar = props => {
                                                 </div>
                                                 <div className="col-6">
                                                     <div>
-                                                        <NestedList init={permisos} onChange={onChangePermisos}/>
+                                                        <NestedList init={permisos} value={data.permisos} onChange={onChangePermisos}/>
                                                     </div>
                                                 </div>
                                             </div>

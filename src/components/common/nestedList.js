@@ -10,7 +10,8 @@ const ItemSub = ({ onClick, id, title, readOnly = false, tag = null, items = [] 
     return (
         <div className="list-group-item">
             <a
-                className={`d-flex flex-row justify-content-between align-items-center ${!collapsed && 'mb-3'}`}
+                className={`d-flex flex-row justify-content-between align-items-center ${!collapsed &&
+                    'mb-3'}`}
                 onClick={onCollapse}
                 // style={{ borderRadius: 0 }}
             >
@@ -35,7 +36,7 @@ const ItemSub = ({ onClick, id, title, readOnly = false, tag = null, items = [] 
                 style={{ borderRadius: 0, borderWidth: '1px 0 0 0' }}
             >
                 {items.map((item, i) => {
-                    const { title, estado } = item;
+                    const { title, estado, url = null } = item;
                     return (
                         <div
                             key={i}
@@ -47,7 +48,7 @@ const ItemSub = ({ onClick, id, title, readOnly = false, tag = null, items = [] 
                                 <input
                                     type="checkbox"
                                     checked={!!estado}
-                                    onChange={() => onClick(id, i, !estado)}
+                                    onChange={() => onClick(id, i, url, !estado)}
                                     readOnly={readOnly}
                                 />
                             </div>
@@ -58,7 +59,7 @@ const ItemSub = ({ onClick, id, title, readOnly = false, tag = null, items = [] 
         </div>
     );
 };
-const Item = ({ onClick, id, readOnly=false, title, estado, ...props }) => {
+const Item = ({ onClick, id, readOnly = false, title, estado = false }) => {
     return (
         <div
             className="list-group-item d-flex flex-row justify-content-between align-items-center"
@@ -78,15 +79,16 @@ const Item = ({ onClick, id, readOnly=false, title, estado, ...props }) => {
 };
 //#endregion
 
-const NestedList = ({ init = [], fill = [], readOnly=false, onChange, clear, maxHeight, ...props }) => {
+const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, maxHeight }) => {
     const [loaded, setLoaded] = useState(false);
-    const [loadedFill,setLoadedFill] = useState(false);
-    const [data, setData] = useState(init);
-    const [search,setSearch] = useState('');
+    const [newVal,setNewVal] = useState(value);
+    const [data, setData] = useState([]);
+    const [search, setSearch] = useState('');
 
     useEffect(() => {
         if (!loaded) {
             if (init.length > 0) {
+                console.log(init);
                 setData(init);
                 setLoaded(true);
             }
@@ -94,10 +96,11 @@ const NestedList = ({ init = [], fill = [], readOnly=false, onChange, clear, max
         }
     }, [init]);
 
-    useEffect(()=>{
-        if (loaded && !loadedFill && fill.length > 0) {
-            const replica = Array.from(data);
-            for (const item of fill) {
+    useEffect(() => {
+        if (loaded && Array.isArray(newVal)) {
+            console.log('useEffecto nuevo valoir',newVal);
+            const replica = [...data];
+            for (const item of newVal) {
                 const fatherId = replica.findIndex(x => x.id === item.id);
                 switch (item.type) {
                     case 'link':
@@ -105,105 +108,119 @@ const NestedList = ({ init = [], fill = [], readOnly=false, onChange, clear, max
                         if (childFather) childFather.estado = true;
                         break;
                     case 'sub':
-                        // Estoy validando si el Id existe y si el item es tipo sub
-                        if (fatherId)
+                        if (fatherId) {
                             if (replica[fatherId].type === 'sub') {
                                 const childFather = replica[fatherId];
                                 for (const child of item.items || []) {
                                     const childIndex = childFather.findIndex(
-                                        x => x.id === child.id,
+                                        x => x.url === child.url,
                                     );
                                     if (childIndex) childFather.items[childIndex].estado = true;
                                 }
                                 childFather.estado = true;
                             }
-                        break;
-                    default:
+                        }
                         break;
                 }
             }
+            console.log(replica);
             setData(replica);
-            setLoadedFill(true);
-            eventChanged();
         }
-    },[fill]);
+    }, [newVal]);
 
-    const eventChanged = () => {
+    const eventChanged = newData => {
         if (typeof onChange === 'function') {
-            const result = [];
-            const _data = [...data];
-
-            for (const main of _data) {
-                if (main.estado) {
-                    switch (main.type) {
-                        case 'link':
-                            result.push(main);
-                            break;
-                        case 'sub':
-                            const _items = main.items.filter(x => x.estado);
-                            result.push({ ...main, items: _items });
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
             onChange(
-                result.map(x => {
+                newData.map(x => {
                     return {
-                        id:x.id,
+                        id: x.id,
                         title: x.title,
                         tag: x.tag,
                         type: x.type,
-                        items: x.type ==="sub"?x.items:[],
-                        url:x.url
-                    }
+                        items: x.type === 'sub' ? x.items : [],
+                        url: x.url,
+                    };
                 }),
             );
         }
     };
 
     const onClickItem = (id, estado = false) => {
-        if(!readOnly){
-            const replica = [...data];
-            const _index = replica.findIndex(x=>x.id === id);
-            replica[_index].estado = estado;
-            setData(replica);
-            eventChanged();
+        console.log(newVal);
+        if (!readOnly && Array.isArray(newVal)) {
+            const _value = [...newVal];
+            const _item = _value.find(x => x.id === id);
+            if (_item) {
+                _item.estado = estado;
+            } else {
+                const item = data.find(x => x.id === id);
+                item.estado = estado;
+                _value.push(item);
+            }
+            console.log(_value);
+            eventChanged(_value);
         }
     };
-    const onClickSub = (id, i2, state = false) => {
-        if(!readOnly){
-            const replica = [...data];
-            const i = replica.findIndex(x=>x.id ===id);
-            const child = Object.assign({}, replica[i]);
-            const childItem = child.items[i2];
-
-            childItem.estado = !!state;
-            child.estado = child.items.some(x => x.estado === true);
-
-            replica[i] = child;
-            setData(replica);
-            eventChanged();
+    const onClickSub = (id, i2, url, estado = false) => {
+        if (!readOnly && Array.isArray(newVal)) {
+            const _value = [...newVal];
+            let item = _value.find(x => x.id === id);
+            if (item) {
+                let subItem = item.items.find(x => x.url === url);
+                if (subItem) subItem.estado = estado;
+                else {
+                    subItem = Object.assign({},data.find(x => x.id === id).items[i2]);
+                    subItem.estado = estado;
+                    item.items.push(subItem);
+                }
+            } else {
+                const newItem = Object.assign({},data.find(x => x.id === id));
+                const subItem = newItem.items.find(x => x.url === url);
+                subItem.estado = estado;
+                newItem.items = [subItem];
+                _value.push(newItem);
+            }
+            eventChanged(_value);
         }
     };
 
     return (
         <>
             <div className="input-group mb-3">
-                <input type="text" className="form-control bg-white" placeholder="Busqueda de permisos" value={search} onChange={ e => setSearch(e.currentTarget.value)} aria-label="Busqueda"/>
+                <input
+                    type="text"
+                    className="form-control bg-white"
+                    placeholder="Busqueda de permisos"
+                    value={search}
+                    onChange={e => setSearch(e.currentTarget.value)}
+                    aria-label="Busqueda"
+                />
             </div>
             <div className="list-group" style={maxHeight ? { maxHeight, overflowY: 'auto' } : {}}>
-                {Array.isArray(data) &&
-                    data.filter(item => {
-                        const title = item.title || '',tag = item.tag || '';
-                        if(search==='') return true;
+                {data
+                    .filter(item => {
+                        const title = item.title || '',
+                            tag = item.tag || '';
+                        if (search === '') return true;
                         return title.includes(search) || tag.includes(search);
-                    }).map((item, i) => {
+                    })
+                    .map((item, i) => {
                         return item.type === 'sub' ? (
-                            <ItemSub key={i} onClick={onClickSub} index={i} {...item} readOnly={!readOnly}/>
+                            <ItemSub
+                                key={i}
+                                onClick={onClickSub}
+                                index={i}
+                                {...item}
+                                readOnly={!readOnly}
+                            />
                         ) : (
-                            <Item key={i} onClick={onClickItem} index={i} {...item} readOnly={!readOnly}/>
+                            <Item
+                                key={i}
+                                onClick={onClickItem}
+                                index={i}
+                                {...item}
+                                readOnly={!readOnly}
+                            />
                         );
                     })}
             </div>
