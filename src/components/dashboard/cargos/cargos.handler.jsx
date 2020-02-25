@@ -1,5 +1,4 @@
 import { default as React, useState, useEffect, Fragment } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import useForm from 'react-hook-form';
 import { withRouter } from 'react-router';
 import { default as Select } from 'react-select';
@@ -15,27 +14,27 @@ import { default as dbPermisos } from '../../../data/permisos';
 import { default as dbCargos } from '../../../data/cargos';
 import { CARGOS_SHOW_ALL } from '../../../constant/url';
 
-import {
-    CARGOS_INIT,
-    CARGOS_ADD_FUNCIONES,
-    CARGOS_CARGO_PARENT,
-    CARGOS_DEL_FUNCIONES,
-    CARGOS_PERMISOS,
-    CARGO_CHANGE_NAME,
-    CARGOS_STATUS,
-} from '../../../constant/actionTypes';
-
 //TODO: hay una mejor forma de hacer este componente
 const Handler = ({ history, match, action = 'update' }) => {
     const { handleSubmit, errors } = useForm();
-    const dispatch = useDispatch();
-
-    const data = useSelector(state => state.cargos);
+    const [data,setData] = useState({
+        id:'',
+        name: '',
+        functions: [],
+        parent: {},
+        permisos: [],
+        active: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    });
     const [backup, setBackup] = useState(null);
+    
+    //TODO: Migrar al data
     const [todoList, setTodoList] = useState([]);
+    const [parent, setParent] = useState([]);
+    
     const [fnText, setFnText] = useState('');
     const [permisos, setPermisos] = useState([]);
-    const [parent, setParent] = useState([]);
     const [initPermisos, setInitPermisos] = useState([]);
     const [cargos, setCargos] = useState([]);
 
@@ -121,7 +120,7 @@ const Handler = ({ history, match, action = 'update' }) => {
             if (_data.exists) {
                 const _result = Object.assign({},_data.data());
                 setBackup(_result);
-                dispatch({ type: CARGOS_INIT, payload: _result });
+                setData({...data,..._result});
             }
         };
         fetch();
