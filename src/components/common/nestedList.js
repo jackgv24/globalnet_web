@@ -114,13 +114,11 @@ const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, ma
                             if (replica[fatherId].type === 'sub') {
                                 const childFather = replica[fatherId];
                                 console.group('Childs');
-                                console.table(item.items);
                                 for (const child of item.items || []) {
-                                    console.log(child);
-                                    const childIndex = childFather.items.findIndex(
-                                        x => x.url === child.url,
+                                    const _child = childFather.items.find(
+                                        x => x.url === child.url
                                     );
-                                    if (childIndex) childFather.items[childIndex].estado = true;
+                                    if (_child) _child.estado = child.estado;
                                 }
                                 childFather.estado = true;
                                 console.groupEnd();
@@ -142,7 +140,7 @@ const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, ma
                         title: x.title,
                         tag: x.tag,
                         type: x.type,
-                        items: x.type === 'sub' ? x.items : [],
+                        items: x.type === 'sub' ? x.items : null,
                         url: x.url,
                         estado:x.estado
                     };
