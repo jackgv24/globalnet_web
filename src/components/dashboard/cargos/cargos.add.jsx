@@ -1,5 +1,4 @@
-import { default as React, useState, useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { default as React, useState, useEffect } from 'react';
 import useForm from 'react-hook-form';
 import { default as Select } from 'react-select';
 import { toast } from 'react-toastify';
@@ -14,79 +13,83 @@ import { default as dbCargos } from '../../../data/cargos';
 import {CARGOS_SHOW_ALL} from '../../../constant/url'
 
 
-import {
-    CARGO_CHANGE_NAME,
-    CARGOS_ADD_FUNCIONES,
-    CARGOS_CARGO_PARENT,
-    CARGOS_DEL_FUNCIONES,
-    CARGOS_PERMISOS,
-} from '../../../constant/actionTypes';
-
-const Agregar = props => {
+const Agregar = () => {
     const { register, handleSubmit, errors } = useForm();
-    const dispatch = useDispatch();
-
-    const data = useSelector(state => state.cargos);
-    const [todoList, setTodoList] = useState([]);
-
     const [fnText, setFnText] = useState('');
-    const [permisos, setPermisos] = useState([]);
+    const [initPermisos, setInitPermisos] = useState([]);
     const [cargos, setCargos] = useState([]);
     const [activeMdl,setActiveMdl] = useState(false);
 
+    //#region Data de formulario
+    const [data,setData] = useState({
+        id:'',
+        name: '',
+        functions: [],
+        parent: {},
+        permisos: [],
+        active: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    });
+    //#endregion
+
     const addFunctions = () => {
         if (fnText.trim() != '') {
-            dispatch({ type: CARGOS_ADD_FUNCIONES, payload: fnText });
+            const functions = data.functions || [];
+            functions.push(fnText);
+            setData({...data,functions});
             setFnText('');
         }
     };
     const delFunctions = index => {
-        dispatch({ type: CARGOS_DEL_FUNCIONES, payload: index });
+        const functions = [...data.functions];
+        functions.splice(index,1);
+        setData({...data,functions});
     };
 
     const onChangeParent = (parent) => {
         const {value=null} = parent || {};
-        dispatch({ type: CARGOS_CARGO_PARENT, payload: value });
+        setData({...data,parent:value});
     };
-    const onChangePermisos = data => {
-        dispatch({ type: CARGOS_PERMISOS, payload: data });
+    const onChangePermisos = permisos => {
+        console.log(permisos);
+        setData({...data,permisos})
     };
     const onSubmit = async (_data, event) => {
         event.preventDefault();
-        try {
-            setActiveMdl(true);
-            const _cargo = { ...data, name: _data.name };
-            const _valName = await dbCargos.getByName(_cargo.name);
-            if (_valName) {
-                toast.error('El cargo ha ingresar se encuentra registrado');
-            } else {
-                const result = await dbCargos.create(_cargo);
-                toast.success(result.message);
-            }
-        } catch (error) {
-            toast.error('Lo sentimos ah ocurrido un error');
-            console.error(error);
-        }
+        // try {
+        //     setActiveMdl(true);
+        //     const _cargo = { ...data, name: _data.name };
+        //     const _valName = await dbCargos.getByName(_cargo.name);
+        //     if (_valName) {
+        //         toast.error('El cargo ha ingresar se encuentra registrado');
+        //     } else {
+        //         const result = await dbCargos.create(_cargo);
+        //         toast.success(result.message);
+        //     }
+        // } catch (error) {
+        //     toast.error('Lo sentimos ah ocurrido un error');
+        //     console.error(error);
+        // }
         setActiveMdl(false);
     };
+
+    useEffect(()=>{
+        console.log(data);
+    },[data])
 
     useEffect(() => {
         console.log('Fech data');
         const fetch = async () => {
-            const [_cargos, _permisos] = await Promise.all([
+            const [_cargos, _initPermisos] = await Promise.all([
                 dbCargos.getAll(),
                 dbPermisos.getAll(),
             ]);
-            if (Array.isArray(_permisos)) setPermisos(_permisos);
+            if (Array.isArray(_initPermisos)) setInitPermisos(_initPermisos);
             if (Array.isArray(_cargos)) setCargos(_cargos);
         };
         fetch();
     }, []);
-
-    useEffect(() => {
-        if (Array.isArray(data.functions)) setTodoList(data.functions);
-        console.log(data);
-    }, [data]);
 
     return (
         <>
@@ -162,8 +165,8 @@ const Agregar = props => {
                                                                     }}
                                                                 >
                                                                     <ul id="todo-list">
-                                                                        {todoList.length > 0
-                                                                            ? todoList.map(
+                                                                        {data.functions.length > 0
+                                                                            ? data.functions.map(
                                                                                   (
                                                                                       description,
                                                                                       index,
@@ -223,7 +226,7 @@ const Agregar = props => {
                                                                             onChange={e =>
                                                                                 setFnText(
                                                                                     e.currentTarget
-                                                                                        .value,
+                                                                                        .value
                                                                                 )
                                                                             }
                                                                         ></textarea>
@@ -250,7 +253,7 @@ const Agregar = props => {
                                                 </div>
                                                 <div className="col-6">
                                                     <div>
-                                                        <NestedList init={permisos} value={data.permisos} onChange={onChangePermisos}/>
+                                                        <NestedList init={initPermisos} value={data.permisos} onChange={onChangePermisos}/>
                                                     </div>
                                                 </div>
                                             </div>

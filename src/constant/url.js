@@ -1,6 +1,6 @@
 const COLABORADOR_ADD = '/colaborador/agregar';
 
-const  CARGOS_SHOW_ALL = '/cargos/';
+const  CARGOS_SHOW_ALL = '/cargos';
 const  CARGOS_SHOW_BY_ID = '/cargos/:id';
 const CARGOS_ADD = '/cargos/agregar';
 
