@@ -88,7 +88,6 @@ const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, ma
     useEffect(() => {
         if (!loaded) {
             if (init.length > 0) {
-                console.log(init);
                 setData(init);
                 setLoaded(true);
             }
@@ -113,7 +112,6 @@ const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, ma
                         if (fatherId) {
                             if (replica[fatherId].type === 'sub') {
                                 const childFather = replica[fatherId];
-                                console.group('Childs');
                                 for (const child of item.items || []) {
                                     const _child = childFather.items.find(
                                         x => x.url === child.url
@@ -121,7 +119,6 @@ const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, ma
                                     if (_child) _child.estado = child.estado;
                                 }
                                 childFather.estado = true;
-                                console.groupEnd();
                             }
                         }
                         break;
@@ -182,7 +179,6 @@ const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, ma
                 newItem.items = [subItem];
                 _value.push(newItem);
             }
-            console.log(_value);
             eventChanged(_value);
         }
     };

@@ -49,12 +49,10 @@ const Table2 = ({
                 id: 'delete',
                 accessor: str => 'delete',
                 Cell: row => {
-                    console.log(row);
                     return (
                         <div>
                             {actions.map((x,i) => {
                                 const { element, text, event } = x;
-                                console.log(row);
                                 return (<span key={i} onClick={()=>{if(typeof event=== "function") event(row.original,i)}}>{element}</span>)
                             })}
                         </div>

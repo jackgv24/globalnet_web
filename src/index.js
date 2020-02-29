@@ -66,9 +66,9 @@ function Root() {
                                         <Route path={`${process.env.PUBLIC_URL}/sample/samplepage`} component={Samplepage}/>
                                         <Route exact path={`${process.env.PUBLIC_URL}/colaborador`} component={ColaboradorView}/>
                                         <Route exact path={`${process.env.PUBLIC_URL}${CARGOS_SHOW_ALL}`} component={CargosView}/>
-                                        <Route exact path={`${process.env.PUBLIC_URL}${COLABORADOR_ADD}`} component={ColaboradorAdd}/>
-                                        <Route path={`${process.env.PUBLIC_URL}${CARGOS_SHOW_BY_ID}`} component={CargosHandle}/>
-                                        <Route path={`${process.env.PUBLIC_URL}${CARGOS_ADD}`} component={CargosAdd}/>
+                                        <Route path={`${process.env.PUBLIC_URL}${COLABORADOR_ADD}`} component={ColaboradorAdd}/>
+                                        <Route exact path={`${process.env.PUBLIC_URL}${CARGOS_SHOW_BY_ID}`} component={CargosHandle}/>
+                                        <Route exact path={`${process.env.PUBLIC_URL}${CARGOS_ADD}`} component={CargosAdd}/>
                                         <Route exact path={`${process.env.PUBLIC_URL}/labs`} component={Lab} />
                                     </App>
                                 </Session>
