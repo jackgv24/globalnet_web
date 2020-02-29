@@ -1,5 +1,4 @@
 import { default as React, useState, useEffect, Fragment } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import useForm from 'react-hook-form';
 import { withRouter } from 'react-router';
 import { default as Select } from 'react-select';
@@ -15,27 +14,27 @@ import { default as dbPermisos } from '../../../data/permisos';
 import { default as dbCargos } from '../../../data/cargos';
 import { CARGOS_SHOW_ALL } from '../../../constant/url';
 
-import {
-    CARGOS_INIT,
-    CARGOS_ADD_FUNCIONES,
-    CARGOS_CARGO_PARENT,
-    CARGOS_DEL_FUNCIONES,
-    CARGOS_PERMISOS,
-    CARGO_CHANGE_NAME,
-    CARGOS_STATUS,
-} from '../../../constant/actionTypes';
-
 //TODO: hay una mejor forma de hacer este componente
 const Handler = ({ history, match, action = 'update' }) => {
     const { handleSubmit, errors } = useForm();
-    const dispatch = useDispatch();
-
-    const data = useSelector(state => state.cargos);
+    const [data,setData] = useState({
+        id:'',
+        name: '',
+        functions: [],
+        parent: {},
+        permisos: [],
+        active: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    });
     const [backup, setBackup] = useState(null);
+    
+    //TODO: Migrar al data
     const [todoList, setTodoList] = useState([]);
+    const [parent, setParent] = useState([]);
+    
     const [fnText, setFnText] = useState('');
     const [permisos, setPermisos] = useState([]);
-    const [parent, setParent] = useState([]);
     const [initPermisos, setInitPermisos] = useState([]);
     const [cargos, setCargos] = useState([]);
 
@@ -45,12 +44,16 @@ const Handler = ({ history, match, action = 'update' }) => {
     //#region Functions
     const addFunctions = () => {
         if (fnText.trim() != '') {
-            dispatch({ type: CARGOS_ADD_FUNCIONES, payload: fnText });
+            const newFunc = Array.from(data.functions);
+            newFunc.push(setFnText);
+            setData({...data,functions:newFunc});
             setFnText('');
         }
     };
     const delFunctions = index => {
-        dispatch({ type: CARGOS_DEL_FUNCIONES, payload: index });
+        const newFunc = Array.from(data.functions)
+        newFunc.splice(index,1);
+        setData({...data,functions:newFunc});
     };
     //#endregion
 
@@ -71,26 +74,16 @@ const Handler = ({ history, match, action = 'update' }) => {
     };
     const onClickReset = async () => {
         setCanWrite(false);
-        dispatch({ type: CARGOS_INIT, payload: backup });
-    };
-    const onChangeName = event => {
-        if (canWrite) {
-            dispatch({ type: CARGO_CHANGE_NAME, payload: event.currentTarget.value.trim() });
-        }
+        setData(backup);
     };
     const onChangeParent = event => {
         const { value = {} } = event || {};
-        setParent(value);
-        dispatch({ type: CARGOS_CARGO_PARENT, payload: value });
-    };
-    const onChangePermisos = data => {
-        dispatch({ type: CARGOS_PERMISOS, payload: data });
+        setData({...data,parent:value})
     };
     const onSubmit = async (_data, event) => {
         event.preventDefault();
         try {
             setLoader(true);
-            console.log(data);
             const _valName = (await dbCargos.getAll()).find(
                 x => x.id !== data.id && x.name === data.name,
             );
@@ -121,7 +114,7 @@ const Handler = ({ history, match, action = 'update' }) => {
             if (_data.exists) {
                 const _result = Object.assign({},_data.data());
                 setBackup(_result);
-                dispatch({ type: CARGOS_INIT, payload: _result });
+                setData({...data,..._result});
             }
         };
         fetch();
@@ -180,7 +173,7 @@ const Handler = ({ history, match, action = 'update' }) => {
                                                                 placeholder="Ingresa el nombre del cargo"
                                                                 value={data.name}
                                                                 readOnly={!canWrite}
-                                                                onChange={onChangeName}
+                                                                onChange={(event)=>{setData({...data,name:event.target.value})}}
                                                             />
                                                             {errors.name && (
                                                                 <span>
@@ -219,7 +212,7 @@ const Handler = ({ history, match, action = 'update' }) => {
                                                                     type="checkbox"
                                                                     checked={data.active}
                                                                     onChange={(event)=>{
-                                                                        if(canWrite)dispatch({type:CARGOS_STATUS,payload:event.currentTarget.checked})
+                                                                        if(canWrite) setData({...data,active:event.currentTarget.checked});
                                                                     }}
                                                                     readOnly={canWrite}
                                                                 />
@@ -365,7 +358,7 @@ const Handler = ({ history, match, action = 'update' }) => {
                                                     <NestedList
                                                         init={permisos}
                                                         value={data.permisos}
-                                                        onChange={onChangePermisos}
+                                                        onChange={(permisos)=>{setData({...data,permisos})}}
                                                         readOnly={!canWrite}
                                                     />
                                                 </div>

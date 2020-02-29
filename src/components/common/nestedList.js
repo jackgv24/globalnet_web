@@ -81,14 +81,13 @@ const Item = ({ onClick, id, readOnly = false, title, estado = false }) => {
 
 const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, maxHeight }) => {
     const [loaded, setLoaded] = useState(false);
-    const [newVal,setNewVal] = useState(value);
+    const [newVal] = useState(value);
     const [data, setData] = useState([]);
     const [search, setSearch] = useState('');
 
     useEffect(() => {
         if (!loaded) {
             if (init.length > 0) {
-                console.log(init);
                 setData(init);
                 setLoaded(true);
             }
@@ -97,25 +96,27 @@ const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, ma
     }, [init]);
 
     useEffect(() => {
-        if (loaded && Array.isArray(newVal)) {
-            console.log('useEffecto nuevo valoir',newVal);
+        if (loaded && Array.isArray(value)) {
             const replica = [...data];
-            for (const item of newVal) {
+            for (const item of value) {
                 const fatherId = replica.findIndex(x => x.id === item.id);
                 switch (item.type) {
                     case 'link':
                         const childFather = replica[fatherId];
-                        if (childFather) childFather.estado = true;
+                        if (childFather) {
+                            childFather.estado = !!item.estado;
+                        }
+                        replica[fatherId] = childFather;
                         break;
                     case 'sub':
                         if (fatherId) {
                             if (replica[fatherId].type === 'sub') {
                                 const childFather = replica[fatherId];
                                 for (const child of item.items || []) {
-                                    const childIndex = childFather.findIndex(
-                                        x => x.url === child.url,
+                                    const _child = childFather.items.find(
+                                        x => x.url === child.url
                                     );
-                                    if (childIndex) childFather.items[childIndex].estado = true;
+                                    if (_child) _child.estado = child.estado;
                                 }
                                 childFather.estado = true;
                             }
@@ -123,10 +124,9 @@ const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, ma
                         break;
                 }
             }
-            console.log(replica);
             setData(replica);
         }
-    }, [newVal]);
+    }, [value]);
 
     const eventChanged = newData => {
         if (typeof onChange === 'function') {
@@ -137,8 +137,9 @@ const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, ma
                         title: x.title,
                         tag: x.tag,
                         type: x.type,
-                        items: x.type === 'sub' ? x.items : [],
+                        items: x.type === 'sub' ? x.items : null,
                         url: x.url,
+                        estado:x.estado
                     };
                 }),
             );
@@ -146,9 +147,8 @@ const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, ma
     };
 
     const onClickItem = (id, estado = false) => {
-        console.log(newVal);
         if (!readOnly && Array.isArray(newVal)) {
-            const _value = [...newVal];
+            const _value = Array.from(value);
             const _item = _value.find(x => x.id === id);
             if (_item) {
                 _item.estado = estado;
@@ -157,13 +157,12 @@ const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, ma
                 item.estado = estado;
                 _value.push(item);
             }
-            console.log(_value);
             eventChanged(_value);
         }
     };
     const onClickSub = (id, i2, url, estado = false) => {
-        if (!readOnly && Array.isArray(newVal)) {
-            const _value = [...newVal];
+        if (!readOnly && Array.isArray(value)) {
+            const _value = [...value];
             let item = _value.find(x => x.id === id);
             if (item) {
                 let subItem = item.items.find(x => x.url === url);
