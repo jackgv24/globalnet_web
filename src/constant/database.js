@@ -1,4 +1,5 @@
 const DBPERMISO = "permisos";
 const DBCARGO = "cargos";
+const DBCOLABORADORES = "colaboradores";
 
-export {DBPERMISO,DBCARGO};
+export {DBPERMISO,DBCARGO,DBCOLABORADORES};

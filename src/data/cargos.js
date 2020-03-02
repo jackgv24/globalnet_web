@@ -29,13 +29,18 @@ class dbPermiso {
         const data = await cargoRef.get();
         return data.empty ? [] : data.docs.map(x => (x.exists ? x.data() : null)).filter(x => !!x);
     }
+    static async getAllActive() {
+        const cargoRef = db.collection(dbKey).where("active","==",true);
+        const data = await cargoRef.get();
+        return data.empty ? [] : data.docs.map(x => (x.exists ? x.data() : null)).filter(x => !!x);
+    }
     static async updateById(id, data) {
         try {
             const cargoRef = db.collection(dbKey).doc(id);
             await cargoRef.set(data);
             return { success: true, message: 'Se ha ingresado correctamente' };
         } catch (e) {
-            
+            return { success: false, message: 'Ha ocurrido un error' };
         }
     }
 

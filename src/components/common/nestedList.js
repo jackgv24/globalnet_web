@@ -96,8 +96,17 @@ const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, ma
     }, [init]);
 
     useEffect(() => {
-        if (loaded && Array.isArray(value)) {
-            const replica = [...data];
+        if (loaded && Array.isArray(value) && value.length > 0) {
+            const duplicate = Array.from(data);
+            const replica = duplicate.map(x=>{
+                if(x.type==='link'){
+                    x.estado = false;
+                } else if (x.type ==='sub' && Array.isArray(x.items)){
+                    x.items = x.items.map(y=>{y.estado = false;return y;});
+                }
+                return x;
+            });
+
             for (const item of value) {
                 const fatherId = replica.findIndex(x => x.id === item.id);
                 switch (item.type) {
@@ -139,7 +148,7 @@ const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, ma
                         type: x.type,
                         items: x.type === 'sub' ? x.items : null,
                         url: x.url,
-                        estado:x.estado
+                        estado:!!x.estado
                     };
                 }),
             );
@@ -162,7 +171,7 @@ const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, ma
     };
     const onClickSub = (id, i2, url, estado = false) => {
         if (!readOnly && Array.isArray(value)) {
-            const _value = [...value];
+            let _value = Array.from(value);
             let item = _value.find(x => x.id === id);
             if (item) {
                 let subItem = item.items.find(x => x.url === url);
@@ -173,11 +182,12 @@ const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, ma
                     item.items.push(subItem);
                 }
             } else {
-                const newItem = Object.assign({},data.find(x => x.id === id));
-                const subItem = newItem.items.find(x => x.url === url);
+                const newItem = Object.create(data.find(x => x.id === id),{});
+                const subItem = Object.create(newItem.items.find(x => x.url === url));
                 subItem.estado = estado;
                 newItem.items = [subItem];
-                _value.push(newItem);
+                newItem.estado = true;
+                _value = [..._value,newItem];
             }
             eventChanged(_value);
         }

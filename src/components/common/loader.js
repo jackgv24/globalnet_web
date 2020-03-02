@@ -14,7 +14,7 @@ const Loader = ({show=true,timeOut=null,...props}) => {
     },[show])
     return (
         <>
-            <div className={`loader-wrapper ${canShow ? '' : 'loderhide'}`}  style={{position:'absolute'}}>
+            <div className={`loader-wrapper ${canShow ? '' : 'loderhide'}`}  style={{position:'fixed'}}>
                 <div className="loader bg-white">
                     <div className="whirly-loader"> </div>
                 </div>

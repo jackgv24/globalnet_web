@@ -1,12 +1,9 @@
-const COLABORADOR_ADD = '/colaborador/agregar';
+//CARGOS
+export const CARGOS_SHOW_ALL = '/cargos';
+export const CARGOS_SHOW_BY_ID = '/cargos/mostrar/:id';
+export const CARGOS_ADD = '/cargos/agregar';
 
-const  CARGOS_SHOW_ALL = '/cargos';
-const  CARGOS_SHOW_BY_ID = '/cargos/mostrar/:id';
-const CARGOS_ADD = '/cargos/agregar';
-
-export {
-    COLABORADOR_ADD,
-    CARGOS_ADD,
-    CARGOS_SHOW_ALL,
-    CARGOS_SHOW_BY_ID
-}
+//COLABORADORES
+export const COLABORADOR_SHOW_ALL = '/colaborador';
+export const COLABORADOR_SHOW_BY_ID = '/colaborador/mostrar/:id'
+export const COLABORADOR_ADD = '/colaborador/agregar';

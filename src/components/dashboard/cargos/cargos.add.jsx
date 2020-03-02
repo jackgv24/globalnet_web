@@ -80,8 +80,8 @@ const Agregar = () => {
         console.log('Fech data');
         const fetch = async () => {
             const [_cargos, _initPermisos] = await Promise.all([
-                dbCargos.getAll(),
-                dbPermisos.getAll(),
+                dbCargos.getAllActive(),
+                dbPermisos.getAllActive(),
             ]);
             if (Array.isArray(_initPermisos)) setInitPermisos(_initPermisos);
             if (Array.isArray(_cargos)) setCargos(_cargos);
@@ -269,7 +269,7 @@ const Agregar = () => {
                                                         <NestedList
                                                             init={initPermisos}
                                                             value={data.permisos}
-                                                            onChange={onChangePermisos}
+                                                            onChange={(permisos)=>{setData({...data,permisos})}}
                                                         />
                                                     </div>
                                                 </div>

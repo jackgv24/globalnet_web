@@ -28,7 +28,7 @@ import SignIn from './auth/signin';
 import Samplepage from './components/sample/samplepage';
 import {default as Lab} from './components/dashboard/componentLab';
 import { default as ColaboradorView } from './components/dashboard/colaborador/colaborador.view';
-import { default as ColaboradorAdd } from './components/dashboard/colaborador/colaborador.add';
+import { default as ColaboradorAdd } from './components/dashboard/colaborador/colaborador.add.rebuild';
 import { default as CargosAdd } from './components/dashboard/cargos/cargos.add';
 import { default as CargosHandle } from './components/dashboard/cargos/cargos.handler';
 import { default as CargosView } from './components/dashboard/cargos/cargos.view';

@@ -105,8 +105,8 @@ const Handler = ({ history, match, action = 'update' }) => {
     useEffect(() => {
         const fetch = async () => {
             const [_cargos, _permisos, _data] = await Promise.all([
-                dbCargos.getAll(),
-                dbPermisos.getAll(),
+                dbCargos.getAllActive(),
+                dbPermisos.getAllActive(),
                 dbCargos.getById(match.params.id),
             ]);
             if (Array.isArray(_permisos)) setPermisos(_permisos);
