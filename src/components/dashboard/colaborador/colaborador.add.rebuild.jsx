@@ -1,7 +1,9 @@
-import { default as React, useState, useEffect, useReducer, useCallback } from 'react';
+import { default as React, useState, useEffect, useReducer } from 'react';
 import useForm from 'react-hook-form';
-import { default as Breadcrumb } from '../../common/breadcrumb';
+import { toast } from 'react-toastify';
 import { default as Select } from 'react-select';
+import { default as Breadcrumb } from '../../common/breadcrumb';
+import { default as Loading } from '../../common/modal';
 import { COLABORADOR_SHOW_ALL } from '../../../constant/url';
 import { dbCargo, dbColaborador, dbPermisos } from '../../../data';
 import { default as NestedList } from '../../common/nestedList';
@@ -120,6 +122,7 @@ const actions = {
 const Colaborador = () => {
     const { register, handleSubmit, errors } = useForm();
     const [data, dispatch] = useReducer(reducer, init);
+    const [loading,setLoading] = useState(false);
     const [permisos, setPermisos] = useState([]);
     const [cargos, setCargos] = useState([]);
 
@@ -143,12 +146,13 @@ const Colaborador = () => {
     const ingresar = async () => {
         let user = null;
         try {
+            setLoading(true);
             const serverData = await dbColaborador.getAll();
             const copyData = JSON.parse(JSON.stringify(Object.assign(data)));
             const existUser = serverData.find(x=>x.email===copyData.email.trim());
             if(existUser) {
-                console.error('El usuario ya se encuentra registrado');
-                alert('El usuario ya existe');
+                toast.error('El usuario ya existe');
+                return;
             }
 
             user = await auth.createUserWithEmailAndPassword(copyData.email, copyData.pwd);
@@ -157,13 +161,16 @@ const Colaborador = () => {
             delete copyData.pwd;
             await ref.set(copyData);
             dispatch({type:actions.clear});
-            console.log('Se ha ingresado correctamente');
+            toast.success('Se ha ingresado correctamente');
         } catch (err) {
-            if(user){
-                await user.user.delete();
+            if(user){ 
+                console.dir(user);
+                await user.user.delete(); 
             }
             console.error(err);
-            alert('Ah ocurrido un error');
+            toast.error('Ah ocurrido un error');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -196,7 +203,8 @@ const Colaborador = () => {
                                         <div className="card-header">
                                             <h5 className="font-primary">Información General</h5>
                                         </div>
-                                        <div className="card-body">
+                                        <div className="card-body position-relative">
+                                            <Loading active={loading}/>
                                             <div className="row">
                                                 <div className="col-12 col-md-6 col-xl-6">
                                                     <div className="form-row">
@@ -455,6 +463,7 @@ const Colaborador = () => {
                                                 <button
                                                     className="btn btn-primary mr-1"
                                                     type="submit"
+                                                    disabled={loading}
                                                 >
                                                     Agregar
                                                 </button>
@@ -464,6 +473,7 @@ const Colaborador = () => {
                                                     onClick={() => {
                                                         dispatch({ type: actions.clear });
                                                     }}
+                                                    disabled={loading}
                                                 >
                                                     Limpiar
                                                 </button>

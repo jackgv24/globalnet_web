@@ -21,7 +21,6 @@ const ItemSub = ({ onClick, id, title, readOnly = false, tag = null, items = [] 
                             {title}
                             <span className="badge badge-primary badge-pill ml-3">{tag}</span>
                         </div>
-                        <span className="badge badge-light badge-pill">items: {items.length}</span>
                     </div>
                 </div>
                 {collapsed ? (
