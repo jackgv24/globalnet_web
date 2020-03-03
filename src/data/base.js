@@ -18,5 +18,6 @@ export const twitterProvider = new  firebase.auth.TwitterAuthProvider();
 export const githubProvider = new  firebase.auth.GithubAuthProvider();
 export const db =  app.firestore();
 export const session = app.auth();
+export const bucket = app.storage();
 
 export default app;

@@ -8,6 +8,7 @@ import { COLABORADOR_SHOW_ALL } from '../../../constant/url';
 import { dbCargo, dbColaborador, dbPermisos } from '../../../data';
 import { default as NestedList } from '../../common/nestedList';
 import { auth } from '../../../data';
+import { uploadPictureProfile } from '../../../data/bucket';
 import user from '../../../assets/images/user/user.png';
 
 //#region Redux
@@ -138,8 +139,11 @@ const Colaborador = () => {
         // Image upload
         const reader = new FileReader();
         reader.readAsDataURL(event.target.files[0]);
+        const img = event.target.files[0];
         reader.onload = _event => {
             dispatch({ type: actions.picture_change, payload: reader.result });
+            // console.log(img)
+            uploadPictureProfile(img.name, img);
         };
     };
 
@@ -163,9 +167,9 @@ const Colaborador = () => {
             dispatch({type:actions.clear});
             toast.success('Se ha ingresado correctamente');
         } catch (err) {
-            if(user){ 
+            if(user){
                 console.dir(user);
-                await user.user.delete(); 
+                await user.user.delete();
             }
             console.error(err);
             toast.error('Ah ocurrido un error');
