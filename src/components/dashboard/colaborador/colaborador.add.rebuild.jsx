@@ -8,7 +8,7 @@ import { COLABORADOR_SHOW_ALL } from '../../../constant/url';
 import { dbCargo, dbColaborador, dbPermisos } from '../../../data';
 import { default as NestedList } from '../../common/nestedList';
 import { auth } from '../../../data';
-import { uploadPictureProfile } from '../../../data/bucket';
+import { uploadPictureProfile, uploadImages } from '../../../data/bucket';
 import user from '../../../assets/images/user/user.png';
 
 //#region Redux
@@ -140,15 +140,14 @@ const Colaborador = () => {
         const reader = new FileReader();
         reader.readAsDataURL(event.target.files[0]);
         const img = event.target.files[0];
-        reader.onload = _event => {
-            dispatch({ type: actions.picture_change, payload: reader.result });
-            // console.log(img)
-            uploadPictureProfile(img.name, img);
+        reader.onload = async _event => {
+            console.log(img);
+            dispatch({ type: actions.picture_change, payload: img });
         };
     };
 
     const ingresar = async () => {
-        let user = null;
+        let user = null,imgUrl;
         try {
             setLoading(true);
             const serverData = await dbColaborador.getAll();
@@ -168,7 +167,6 @@ const Colaborador = () => {
             toast.success('Se ha ingresado correctamente');
         } catch (err) {
             if(user){
-                console.dir(user);
                 await user.user.delete();
             }
             console.error(err);
@@ -409,10 +407,10 @@ const Colaborador = () => {
                                                                 <div className="hovercard">
                                                                     <div className="contact-profile">
                                                                         <img
-                                                                            className="shadow-sm bg-ligth rounded-circle img-100"
+                                                                            className="shadow-sm bg-ligth rounded img-100"
                                                                             src={
                                                                                 data.pictureUrl
-                                                                                    ? data.pictureUrl
+                                                                                    ? URL.createObjectURL(data.pictureUrl)
                                                                                     : user
                                                                             }
                                                                             alt=""
