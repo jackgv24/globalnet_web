@@ -2,6 +2,7 @@ import { default as React, useEffect, useState } from 'react';
 import { default as Breadcrumb } from '../common/breadcrumb';
 
 import { default as NestedList } from '../common/nestedList';
+import { default as Avatar } from '../common/avatar.picture';
 
 const ComponentLab = () => {
     const [data] = useState([
@@ -58,6 +59,20 @@ const ComponentLab = () => {
                                 <div className="row">
                                     <div className="col-12">
                                         <NestedList init={data} fill={fill} onChange={onChange} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-5">
+                    <div className="card">
+                            <div className="card-header">
+                                <h5 className="font-primary">Avatar</h5>
+                            </div>
+                            <div className="card-body">
+                                <div className="row">
+                                    <div className="col-12">
+                                        <Avatar/>
                                     </div>
                                 </div>
                             </div>
