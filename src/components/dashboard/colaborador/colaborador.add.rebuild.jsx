@@ -8,7 +8,7 @@ import { COLABORADOR_SHOW_ALL } from '../../../constant/url';
 import { dbCargo, dbColaborador, dbPermisos } from '../../../data';
 import { default as NestedList } from '../../common/nestedList';
 import { auth } from '../../../data';
-import { uploadPictureProfile, uploadImages } from '../../../data/bucket';
+import { default as Avatar } from '../../common/avatar.picture';
 import user from '../../../assets/images/user/user.png';
 
 //#region Redux
@@ -126,25 +126,6 @@ const Colaborador = () => {
     const [loading,setLoading] = useState(false);
     const [permisos, setPermisos] = useState([]);
     const [cargos, setCargos] = useState([]);
-
-    const readUrl = event => {
-        if (event.target.files.length === 0) {
-            return;
-        }
-        //Image upload validation
-        var mimeType = event.target.files[0].type;
-        if (mimeType.match(/image\/*/) == null) {
-            return;
-        }
-        // Image upload
-        const reader = new FileReader();
-        reader.readAsDataURL(event.target.files[0]);
-        const img = event.target.files[0];
-        reader.onload = async _event => {
-            console.log(img);
-            dispatch({ type: actions.picture_change, payload: img });
-        };
-    };
 
     const ingresar = async () => {
         let user = null,imgUrl;
@@ -403,33 +384,10 @@ const Colaborador = () => {
                                                 <div className="col-12 col-md-6 col-xl-6">
                                                     <div className="form-row">
                                                         <div className="col-12 mb-5">
-                                                            <div className="text-center user-profile">
-                                                                <div className="hovercard">
-                                                                    <div className="contact-profile">
-                                                                        <img
-                                                                            className="shadow-sm bg-ligth rounded img-100"
-                                                                            src={
-                                                                                data.pictureUrl
-                                                                                    ? URL.createObjectURL(data.pictureUrl)
-                                                                                    : user
-                                                                            }
-                                                                            alt=""
-                                                                        />
-                                                                        <div className="icon-wrapper bg-dark text-white">
-                                                                            <i className="icofont icofont-pencil-alt-5">
-                                                                                <input
-                                                                                    className="upload"
-                                                                                    type="file"
-                                                                                    accept="image/*"
-                                                                                    onChange={
-                                                                                        readUrl
-                                                                                    }
-                                                                                />
-                                                                            </i>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                            <Avatar onChange={(img)=>{
+                                                                console.log(img);
+                                                                dispatch({ type: actions.picture_change, payload: img });
+                                                            }}/>
                                                         </div>
                                                         <div className="col-12 mb-3">
                                                             <h6 className="text-dark">

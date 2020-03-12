@@ -7,7 +7,6 @@ import NestedList from '../../common/nestedList';
 
 const Agregar = () => {
     const { register, handleSubmit, errors } = useForm();
-    const [validateClass, setValidateClass] = useState(false);
     const [url, setUrl] = useState();
     const [permiso, setPermisos] = useState([]);
     const [cargos,setCargos] = useState([])
@@ -24,8 +23,12 @@ const Agregar = () => {
         // Image upload
         const reader = new FileReader();
         reader.readAsDataURL(event.target.files[0]);
-        reader.onload = _event => {
+        const img = event.target.files[0];
+        reader.onload = async _event => {
             setUrl(reader.result);
+            if(typeof onChange === "function") {
+                onChange(img);
+            }
         };
     };
 
