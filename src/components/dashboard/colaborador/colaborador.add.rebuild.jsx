@@ -6,22 +6,26 @@ import { default as Breadcrumb } from '../../common/breadcrumb';
 import { default as Loading } from '../../common/modal';
 import { COLABORADOR_SHOW_ALL } from '../../../constant/url';
 import { dbCargo, dbColaborador, dbPermisos } from '../../../data';
+import { uploadPictureFromBlob as uploadToBucket } from '../../../data/bucket/'
 import { default as NestedList } from '../../common/nestedList';
 import { auth } from '../../../data';
 import { default as Avatar } from '../../common/avatar.picture';
-import user from '../../../assets/images/user/user.png';
 
 //#region Redux
 const init = {
     id: '',
     name: '',
-    pictureUrl: null,
+    pictureFile: null,
+    pictureUrl:null,
     email: '',
     cedula: '',
     pwd: '',
     direccion: '',
     cargo: {},
     permisos: [],
+    createdAt:new Date(),
+    updatedAt:new Date(),
+    active:true
 };
 const reducer = (state, { type = null, payload = null }) => {
     switch (type) {
@@ -34,7 +38,7 @@ const reducer = (state, { type = null, payload = null }) => {
         case actions.email_change:
             return { ...state, email: payload };
         case actions.picture_change:
-            return { ...state, pictureUrl: payload };
+            return { ...state, pictureFile: payload };
         case actions.cedula_change:
             return { ...state, cedula: payload };
         case actions.direccion_change:
@@ -80,7 +84,6 @@ const reducer = (state, { type = null, payload = null }) => {
                 const existIndex = acc.findIndex(x => x.id === value.id);
                 let nested = null;
                 if (existIndex === -1) {
-                    console.log(value);
                     return [...acc, value];
                 }
 
@@ -143,6 +146,16 @@ const Colaborador = () => {
             const ref = dbColaborador.getRefById(user.user.uid);
             copyData.id = user.user.uid;
             delete copyData.pwd;
+            if(data.pictureFile) {
+                console.log('se está subiendo la imagen');
+                const {url,message,status} = await uploadToBucket(copyData.id,data.pictureFile)
+                if(!status) {console.error(message);}
+                else if(url) {
+                    copyData.pictureUrl = url;
+                }
+            }
+            delete copyData.pictureFile;
+
             await ref.set(copyData);
             dispatch({type:actions.clear});
             toast.success('Se ha ingresado correctamente');
@@ -385,7 +398,6 @@ const Colaborador = () => {
                                                     <div className="form-row">
                                                         <div className="col-12 mb-5">
                                                             <Avatar onChange={(img)=>{
-                                                                console.log(img);
                                                                 dispatch({ type: actions.picture_change, payload: img });
                                                             }}/>
                                                         </div>
@@ -440,7 +452,7 @@ const Colaborador = () => {
                                             </div>
                                             <a
                                                 href={COLABORADOR_SHOW_ALL}
-                                                className="btn btn-info mr-1"
+                                                className="btn btn-light text-primary mr-1"
                                                 type="button"
                                             >
                                                 Mostrar Todos

@@ -12,6 +12,7 @@ const Table2 = ({
     multiSelectOption = false,
     actions = [],
     pagination,
+    onClickRow = null,
     ...props
 }) => {
     const [checkedValues, setCheckedValues] = useState([]);
@@ -143,6 +144,7 @@ const Table2 = ({
                 contentEditable={isEditable}
                 suppressContentEditableWarning
                 onBlur={onBlur}
+                onClick={()=>{if(typeof onClickRow === 'function') onClickRow(cellInfo.original)}}
                 dangerouslySetInnerHTML={{
                     __html: data[cellInfo.index][cellInfo.column.id],
                 }}

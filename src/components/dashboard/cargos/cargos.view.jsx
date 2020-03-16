@@ -1,4 +1,5 @@
 import { default as React, useEffect, useState } from 'react';
+import '../../../helpers/tools';
 import { withRouter } from 'react-router';
 
 import { default as Breadcrumb } from '../../common/breadcrumb';
@@ -9,11 +10,6 @@ import { CARGOS_SHOW_BY_ID } from '../../../constant/url'
 
 const View = ({ history }) => {
     const [cargos, setCargos] = useState([]);
-    const fnIsArray = (fns) => {
-        if(!Array.isArray(fns)) return false;
-        if(fns.length<=0) return false;
-        return true;
-    }
 
     useEffect(() => {
         const fetch = async () => {
@@ -22,8 +18,8 @@ const View = ({ history }) => {
                 id:{content:x.id,show:false},
                 Nombre: x.name,
                 Supervisor: x.parent? x.parent.name :'',
-                'Funciones':fnIsArray(x.functions)?x.functions.length:'No hay funciones',
-                'Fecha de Creacion': x.createdAt? x.createdAt.toDate().toLocaleDateString():'No hay fecha de registro',
+                'Funciones':Array.valArray(x.functions)?x.functions.length:'No hay funciones',
+                'Fecha de Creacion': x.createdAt? x.createdAt.toDate().toLocaleDateString():'Sin Registro',
                 Activo:<i className={`fa fa-circle font-${x.active?'success':'danger'} f-12`}/>,
             }));
 
@@ -45,7 +41,7 @@ const View = ({ history }) => {
                     <div className="col-12">
                         <div className="card">
                             <div className="card-header">
-                                <h5 className="font-primary">Información General De Cargos</h5>
+                                <h5 className="font-primary">Informe de Cargos</h5>
                             </div>
                             <div className="card-body">
                                 <Table2

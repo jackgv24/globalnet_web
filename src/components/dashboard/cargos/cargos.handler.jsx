@@ -141,7 +141,7 @@ const Handler = ({ history, match, action = 'update' }) => {
                             onSubmit={handleSubmit(onSubmit)}
                         >
                             <div className="row">
-                                <div className="col-12 col-lg-10">
+                                <div className="col-12 col-lg-10 col-xl-8 offset-lg-2 offset-xl-2">
                                     <div className="card">
                                         <div className="card-header d-flex justify-content-between">
                                             <h5 className="font-primary">
