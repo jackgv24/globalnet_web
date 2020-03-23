@@ -6,168 +6,119 @@ import { default as Breadcrumb } from '../../common/breadcrumb';
 import { default as Loading } from '../../common/modal';
 import { COLABORADOR_SHOW_ALL } from '../../../constant/url';
 import { dbCargo, dbColaborador, dbPermisos } from '../../../data';
-import { uploadPictureFromBlob as uploadToBucket } from '../../../data/bucket/'
 import { default as NestedList } from '../../common/nestedList';
-import { auth } from '../../../data';
 import { default as Avatar } from '../../common/avatar.picture';
 
 //#region Redux
 const init = {
     id: '',
     name: '',
-    pictureFile: null,
-    pictureUrl:null,
+    pictureUrl: null,
     email: '',
     cedula: '',
     pwd: '',
     direccion: '',
-    cargo: {},
+    cargo: null,
     permisos: [],
-    createdAt:new Date(),
-    updatedAt:new Date(),
-    active:true
-};
-const reducer = (state, { type = null, payload = null }) => {
-    switch (type) {
-        case actions.clear:
-            return init;
-        case actions.pwd_change:
-            return { ...state, pwd: payload };
-        case actions.name_change:
-            return { ...state, name: payload };
-        case actions.email_change:
-            return { ...state, email: payload };
-        case actions.picture_change:
-            return { ...state, pictureFile: payload };
-        case actions.cedula_change:
-            return { ...state, cedula: payload };
-        case actions.direccion_change:
-            return { ...state, direccion: payload };
-        case actions.cargos_change:
-            let { permisos: _permisos = [] } = payload || {};
-            let { permisos = [] } = state || {};
-            if (!Array.isArray(_permisos)) return { ...state, cargo: payload };
-            let newPermiso = [
-                ...permisos
-                    .reduce((acc, x) => {
-                        if (x.type === 'link' && x.from === 'cargo') {
-                            return acc;
-                        } else if (x.type === 'sub' && Array.isArray(x.items)) {
-                            x.items = x.items.filter(y => y.from === 'user' || !y.from);
-                            if (x.items.length === 0) return acc;
-                        }
-                        return [...acc, x];
-                    }, [])
-                    .map(x => {
-                        if (x.type === 'link') {
-                            x.from = 'user';
-                        } else if (x.type === 'sub' && Array.isArray(x.items)) {
-                            x.items = x.items.map(x => {
-                                x.from = 'user';
-                                return x;
-                            });
-                        }
-                        return x;
-                    }),
-                ..._permisos.map(x => {
-                    if (x.type === 'link') {
-                        x.from = 'cargo';
-                    } else if (x.type === 'sub' && Array.isArray(x.items)) {
-                        x.items = x.items.map(y => {
-                            y.from = 'cargo';
-                            return y;
-                        });
-                    }
-                    return x;
-                }),
-            ].reduce((acc, value) => {
-                const existIndex = acc.findIndex(x => x.id === value.id);
-                let nested = null;
-                if (existIndex === -1) {
-                    return [...acc, value];
-                }
-
-                nested = Object.assign({}, acc[existIndex]);
-
-                if (value.type === 'sub' && nested.type === 'sub' && Array.isArray(value.items)) {
-                    const anexo = value.items.reduce(
-                        (itemAcc, itemVal) =>
-                            nested.items.find(x => x.url === itemVal.url)
-                                ? itemAcc
-                                : [...itemAcc, itemVal],
-                        [],
-                    );
-                    if (anexo.items > 0) anexo.estado = true;
-                    acc[existIndex].items = [...nested.items, ...anexo];
-                    return acc;
-                }
-            }, []);
-
-            return { ...state, cargo: payload, permisos: newPermiso };
-        case actions.permisos_change:
-            return { ...state, permisos: payload };
-        default:
-            return state;
-    }
-};
-const actions = {
-    name_change: 'name_change',
-    picture_change: 'picture_change',
-    email_change: 'email_change',
-    cedula_change: 'cedula_change',
-    direccion_change: 'direccion_change',
-    cargos_change: 'cargos_change',
-    permisos_change: 'permisos_change',
-    pwd_change: 'pwd_change',
-    clear: 'clear',
 };
 //#endregion
-
 const Colaborador = () => {
     const { register, handleSubmit, errors } = useForm();
-    const [data, dispatch] = useReducer(reducer, init);
-    const [loading,setLoading] = useState(false);
+    const [data, setData] = useState({ ...init });
+    const [uxPermisos, setUxPermisos] = useState([]);
+    const [avatarImg, setAvatarImg] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [permisos, setPermisos] = useState([]);
     const [cargos, setCargos] = useState([]);
 
     const ingresar = async () => {
-        let user = null,imgUrl;
         try {
             setLoading(true);
-            const serverData = await dbColaborador.getAll();
-            const copyData = JSON.parse(JSON.stringify(Object.assign(data)));
-            const existUser = serverData.find(x=>x.email===copyData.email.trim());
-            if(existUser) {
+            const serverData = await dbColaborador.getAll(),
+                copyData = JSON.parse(JSON.stringify(data)),
+                existUser = serverData.find(x => x.email === copyData.email.trim());
+
+            if (existUser) {
                 toast.error('El usuario ya existe');
                 return;
             }
 
-            user = await auth.createUserWithEmailAndPassword(copyData.email, copyData.pwd);
-            const ref = dbColaborador.getRefById(user.user.uid);
-            copyData.id = user.user.uid;
-            delete copyData.pwd;
-            if(data.pictureFile) {
-                console.log('se está subiendo la imagen');
-                const {url,message,status} = await uploadToBucket(copyData.id,data.pictureFile)
-                if(!status) {console.error(message);}
-                else if(url) {
-                    copyData.pictureUrl = url;
-                }
+            const {
+                success = false,
+                message = 'No se ha podido ingresar',
+            } = await dbColaborador.create(copyData, avatarImg);
+            
+            if (!success) toast.error(message);
+            else {
+                setAvatarImg(null);
+                dispatch({ type: actions.clear });
+                toast.success('Se ha ingresado correctamente');
             }
-            delete copyData.pictureFile;
-
-            await ref.set(copyData);
-            dispatch({type:actions.clear});
-            toast.success('Se ha ingresado correctamente');
         } catch (err) {
-            if(user){
-                await user.user.delete();
-            }
             console.error(err);
             toast.error('Ah ocurrido un error');
         } finally {
             setLoading(false);
         }
+    };
+
+    const onChangeCargo = (event = { value: {}, label: null }) => {
+        const cargoData = { ...event }.value || {};
+        const eventData = cargoData.permisos || [];
+        const payloadPermisos = [...eventData].map(x => {
+            if (x.type === 'link') {
+                x.from = 'cargo';
+            } else if (x.type === 'sub' && Array.isArray(x.items)) {
+                x.items = x.items.map(y => {
+                    y.from = 'cargo';
+                    return y;
+                });
+            }
+            return x;
+        });
+        const storePermisos = [...data.permisos]
+            .map(x => {
+                if (x.type === 'link' && !x.from) x.from = 'user';
+                else if (x.type === 'link' && x.from === 'cargo') return null;
+                else if (x.type === 'sub' && Array.isArray(x.items)) {
+                    x.items = [...x.items]
+                        .map(y => {
+                            if (!y.from) y.from = 'user';
+                            return y;
+                        })
+                        .filter(y => y.from === 'user');
+                    if (x.items.length < 1) return null;
+                }
+                return x;
+            })
+            .filter(x => {
+                return x !== null;
+            });
+        const _permisos = [...payloadPermisos, ...storePermisos].reduce((acc, x) => {
+            const existIndex = acc.findIndex(x => x.id === x.id);
+            let nested = null;
+
+            if (existIndex === -1) {
+                return [...acc, x];
+            }
+            nested = { ...acc[existIndex] };
+
+            if (x.type === 'sub' && nested.type === 'sub' && Array.isArray(x.items)) {
+                const anexo = x.items.reduce(
+                    (itemAcc, itemVal) =>
+                        nested.items.find(x => x.url === itemVal.url)
+                            ? itemAcc
+                            : [...itemAcc, itemVal],
+                    [],
+                );
+                if (anexo.items > 0) anexo.estado = true;
+                acc[existIndex].items = [...nested.items, ...anexo];
+                return acc;
+            }
+        }, []);
+        setData({ ...data, permisos: _permisos });
+        setUxPermisos([..._permisos]);
+        setData({ ...data, cargo: cargoData });
     };
 
     useEffect(() => {
@@ -200,7 +151,7 @@ const Colaborador = () => {
                                             <h5 className="font-primary">Información General</h5>
                                         </div>
                                         <div className="card-body position-relative">
-                                            <Loading active={loading}/>
+                                            <Loading active={loading} />
                                             <div className="row">
                                                 <div className="col-12 col-md-6 col-xl-6">
                                                     <div className="form-row">
@@ -216,9 +167,9 @@ const Colaborador = () => {
                                                                 placeholder="Nombre Completo"
                                                                 value={data.name}
                                                                 onChange={event => {
-                                                                    dispatch({
-                                                                        type: actions.name_change,
-                                                                        payload: event.target.value,
+                                                                    setData({
+                                                                        ...data,
+                                                                        name: event.target.value,
                                                                     });
                                                                 }}
                                                                 ref={register({
@@ -251,10 +202,9 @@ const Colaborador = () => {
                                                                     placeholder="Ingresa email"
                                                                     value={data.email}
                                                                     onChange={event => {
-                                                                        dispatch({
-                                                                            type:
-                                                                                actions.email_change,
-                                                                            payload:
+                                                                        setData({
+                                                                            ...data,
+                                                                            email:
                                                                                 event.target.value,
                                                                         });
                                                                     }}
@@ -291,11 +241,9 @@ const Colaborador = () => {
                                                                     placeholder="Contraseña Segura"
                                                                     value={data.pwd}
                                                                     onChange={event => {
-                                                                        dispatch({
-                                                                            type:
-                                                                                actions.pwd_change,
-                                                                            payload:
-                                                                                event.target.value,
+                                                                        setData({
+                                                                            ...data,
+                                                                            pwd: event.target.value,
                                                                         });
                                                                     }}
                                                                     ref={register({
@@ -303,11 +251,22 @@ const Colaborador = () => {
                                                                     })}
                                                                 />
                                                                 <div className="input-group-append">
-                                                                    <button className="btn btn-info px-3" type="button" disabled={true}><i className="fa fa-plus" aria-hidden="true"></i></button>
+                                                                    <button
+                                                                        className="btn btn-info px-3"
+                                                                        type="button"
+                                                                        disabled={true}
+                                                                    >
+                                                                        <i
+                                                                            className="fa fa-plus"
+                                                                            aria-hidden="true"
+                                                                        ></i>
+                                                                    </button>
                                                                 </div>
                                                             </div>
                                                             {errors.pwd && (
-                                                                <span>Favor ingresar una contraseña</span>
+                                                                <span>
+                                                                    Favor ingresar una contraseña
+                                                                </span>
                                                             )}
                                                         </div>
                                                         <div className="col-md-12 mb-3">
@@ -332,10 +291,9 @@ const Colaborador = () => {
                                                                     placeholder="Ingresa cédula"
                                                                     value={data.cedula}
                                                                     onChange={event => {
-                                                                        dispatch({
-                                                                            type:
-                                                                                actions.cedula_change,
-                                                                            payload:
+                                                                        setData({
+                                                                            ...data,
+                                                                            cedula:
                                                                                 event.target.value,
                                                                         });
                                                                     }}
@@ -359,20 +317,13 @@ const Colaborador = () => {
                                                                 isSearchable={true}
                                                                 name="cargo"
                                                                 placeholder="Seleciona el cargo"
-                                                                onChange={event => {
-                                                                    const { value = null } =
-                                                                        event || {};
-                                                                    dispatch({
-                                                                        type: actions.cargos_change,
-                                                                        payload: value,
-                                                                    });
-                                                                }}
                                                                 options={cargos.map(x => ({
-                                                                    value: x,
+                                                                    value: { ...x },
                                                                     label:
                                                                         x.name ||
                                                                         'Registro sin nombre',
                                                                 }))}
+                                                                onChange={onChangeCargo}
                                                             />
                                                         </div>
                                                         <div className="col-md-12 mb-3">
@@ -383,10 +334,10 @@ const Colaborador = () => {
                                                                 name="dir"
                                                                 value={data.direccion}
                                                                 onChange={event =>
-                                                                    dispatch({
-                                                                        type:
-                                                                            actions.direccion_change,
-                                                                        payload: event.target.value,
+                                                                    setData({
+                                                                        ...data,
+                                                                        direccion:
+                                                                            event.target.value,
                                                                     })
                                                                 }
                                                                 placeholder="Ingresa la dirección del colaborador"
@@ -397,9 +348,10 @@ const Colaborador = () => {
                                                 <div className="col-12 col-md-6 col-xl-6">
                                                     <div className="form-row">
                                                         <div className="col-12 mb-5">
-                                                            <Avatar onChange={(img)=>{
-                                                                dispatch({ type: actions.picture_change, payload: img });
-                                                            }}/>
+                                                            <Avatar
+                                                                file={avatarImg}
+                                                                onChange={img => setAvatarImg(img)}
+                                                            />
                                                         </div>
                                                         <div className="col-12 mb-3">
                                                             <h6 className="text-dark">
@@ -416,12 +368,12 @@ const Colaborador = () => {
                                                             </label>
                                                             <NestedList
                                                                 init={permisos}
-                                                                value={data.permisos}
-                                                                onChange={permisos => {
-                                                                    dispatch({
-                                                                        type:
-                                                                            actions.permisos_change,
-                                                                        payload: permisos,
+                                                                value={uxPermisos}
+                                                                onChange={value => {
+                                                                    setUxPermisos([...value]);
+                                                                    setData({
+                                                                        ...data,
+                                                                        permisos: [...value],
                                                                     });
                                                                 }}
                                                             />
@@ -442,9 +394,7 @@ const Colaborador = () => {
                                                 <button
                                                     className="btn btn-danger mr-1"
                                                     type="reset"
-                                                    onClick={() => {
-                                                        dispatch({ type: actions.clear });
-                                                    }}
+                                                    onClick={() => setData(init)}
                                                     disabled={loading}
                                                 >
                                                     Limpiar

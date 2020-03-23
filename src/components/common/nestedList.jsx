@@ -78,7 +78,7 @@ const Item = ({ onClick, id, readOnly = false, title, estado = false }) => {
 };
 //#endregion
 
-const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, maxHeight }) => {
+const NestedList = ({ init = [], value=[], cargo = [], readOnly = false, onChange, maxHeight }) => {
     const [loaded, setLoaded] = useState(false);
     const [newVal] = useState(value);
     const [data, setData] = useState([]);
@@ -95,9 +95,10 @@ const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, ma
     }, [init]);
 
     useEffect(() => {
-        if (loaded && Array.isArray(value) && value.length > 0) {
-            const duplicate = Array.from(data);
-            const replica = duplicate.map(x=>{
+        const copyValue = [...value],copyData = [...data];
+        
+        if (loaded && Array.isArray(value) && Array.isArray(data)) {
+            const replica = copyData.map(x=>{
                 if(x.type==='link'){
                     x.estado = false;
                 } else if (x.type ==='sub' && Array.isArray(x.items)){
@@ -105,8 +106,7 @@ const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, ma
                 }
                 return x;
             });
-
-            for (const item of value) {
+            for (const item of copyValue) {
                 const fatherId = replica.findIndex(x => x.id === item.id);
                 switch (item.type) {
                     case 'link':
@@ -153,7 +153,6 @@ const NestedList = ({ init = [], value=[], readOnly = false, onChange, clear, ma
             );
         }
     };
-
     const onClickItem = (id, estado = false) => {
         if (!readOnly && Array.isArray(newVal)) {
             const _value = Array.from(value);

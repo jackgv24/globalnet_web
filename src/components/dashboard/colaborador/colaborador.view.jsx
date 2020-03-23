@@ -17,14 +17,23 @@ const ColaboradorVista = ({ history }) => {
         const fetch = async () => {
             const _data = await dbColaborador.getAll();
             console.log(_data);
-            const formatData = _data.map(x=>({
-              id:{content:x.id,show:false},
-              Nombre:x.name,
-              Cedula:x.cedula,
-              Usuario:x.email,
-              'Fecha de Creacion': x.createdAt? x.createdAt.toDate().toLocaleDateString():'Sin Registro',
-              Activo:<i className={`fa fa-circle font-${x.active?'success':'danger'} f-12`}/>,
-            }))
+            const formatData = _data.map(x => {
+                console.log(x);
+                const result = {
+                    id: { content: x.id, show: false },
+                    Nombre: x.name,
+                    Cedula: x.cedula,
+                    Usuario: x.email,
+                    'Creacion': x.createdAt? x.createdAt.toDate().toLocaleDateString():'Sin Registro',
+                    'Actualización': x.updatedAt? x.updatedAt.toDate().toLocaleDateString():'Sin Registro',
+                    Activo: (
+                        <i
+                            className={`fa fa-circle font-${x.active ? 'success' : 'danger'} f-12`}
+                        />
+                    ),
+                };
+                return result;
+            });
             setData(formatData);
         };
         fetch();
@@ -62,7 +71,9 @@ const ColaboradorVista = ({ history }) => {
                                             label: 'test',
                                         },
                                     ]}
-                                    onClickRow={(info)=>{console.log(`El registro de usuario => ${info.id.content}`)}}
+                                    onClickRow={info => {
+                                        console.log(`El registro de usuario => ${info.id.content}`);
+                                    }}
                                 />
                             </div>
                         </div>

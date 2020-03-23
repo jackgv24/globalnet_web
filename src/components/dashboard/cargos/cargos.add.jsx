@@ -24,10 +24,7 @@ const Agregar = () => {
         name: '',
         functions: [],
         parent: {},
-        permisos: [],
-        active: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        permisos: []
     };
     const [data, setData] = useState(init);
     //#endregion

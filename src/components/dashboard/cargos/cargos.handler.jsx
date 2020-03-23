@@ -22,10 +22,7 @@ const Handler = ({ history, match, action = 'update' }) => {
         name: '',
         functions: [],
         parent: {},
-        permisos: [],
-        active: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        permisos: []
     });
     const [backup, setBackup] = useState(null);
     

@@ -50,7 +50,9 @@ const Avatar = ({ file = null, onChange = null, height = null, width = null, can
     }, [croppedAreaPixels]);
 
     useLayoutEffect(()=>{
-        if((file instanceof Blob || file instanceof File || file === null) && !Object.is(file,croppedImage) ){
+        if(!file){
+            setCroppedImage(null);
+        } else if((file instanceof Blob || file instanceof File) && !Object.is(file,croppedImage) ){
             if(file instanceof File || file instanceof Blob) {
                 if(!file.type.includes('image')) return;
             }
