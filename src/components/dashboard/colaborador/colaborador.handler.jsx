@@ -1,6 +1,6 @@
-import { default as React, useState, useEffect, useReducer } from 'react';
-import useForm from 'react-hook-form';
+import { default as React, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { default as useForm } from 'react-hook-form';
 import { default as Select } from 'react-select';
 import { default as Breadcrumb } from '../../common/breadcrumb';
 import { default as Loading } from '../../common/modal';
@@ -8,8 +8,9 @@ import { COLABORADOR_SHOW_ALL } from '../../../constant/url';
 import { dbCargo, dbColaborador, dbPermisos } from '../../../data';
 import { default as NestedList } from '../../common/nestedList';
 import { default as Avatar } from '../../common/avatar.picture';
+import { withRouter } from 'react-router';
+import { default as Swal } from 'sweetalert2';
 
-//#region Redux
 const init = {
     id: '',
     name: '',
@@ -21,45 +22,35 @@ const init = {
     cargo: null,
     permisos: [],
 };
-//#endregion
-const Colaborador = () => {
+
+const Handler = ({ match, action = 'update' }) => {
+
     const { register, handleSubmit, errors } = useForm();
+
     const [data, setData] = useState({ ...init });
+    const [backup, setBackup] = useState(null);
+
+    const [canWrite, setCanWrite] = useState(false);
     const [uxPermisos, setUxPermisos] = useState([]);
-    const [avatarImg, setAvatarImg] = useState(null);
     const [loading, setLoading] = useState(false);
+
+    const [avatarImg, setAvatarImg] = useState(null);
     const [permisos, setPermisos] = useState([]);
     const [cargos, setCargos] = useState([]);
 
-    const ingresar = async () => {
-        try {
-            setLoading(true);
-            const serverData = await dbColaborador.getAll(),
-                copyData = JSON.parse(JSON.stringify(data)),
-                existUser = serverData.find(x => x.email === copyData.email.trim());
-
-            if (existUser) {
-                toast.error('El usuario ya existe');
-                return;
-            }
-
-            const {
-                success = false,
-                message = 'No se ha podido ingresar',
-            } = await dbColaborador.create(copyData, avatarImg);
-            
-            if (!success) toast.error(message);
-            else {
-                setAvatarImg(null);
-                dispatch({ type: actions.clear });
-                toast.success('Se ha ingresado correctamente');
-            }
-        } catch (err) {
-            console.error(err);
-            toast.error('Ah ocurrido un error');
-        } finally {
-            setLoading(false);
-        }
+    const onClickWantUpdate = async () => {
+        Swal.fire({
+            title: '¿Deseas editar el registro?',
+            text: 'Recuerda que al modificar el registro, los cambios seran permanentes',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Vamos',
+            confirmButtonColor: '#007bff',
+            cancelButtonColor: '#ff5370',
+            cancelButtonText: 'No',
+        }).then(({ value }) => {
+            if (value) setCanWrite(true);
+        });
     };
 
     const onChangeCargo = (event = { value: {}, label: null }) => {
@@ -77,23 +68,23 @@ const Colaborador = () => {
             return x;
         });
         const storePermisos = [...data.permisos]
-            .map(x => {
-                if (x.type === 'link' && !x.from) x.from = 'user';
-                else if (x.type === 'link' && x.from === 'cargo') return null;
-                else if (x.type === 'sub' && Array.isArray(x.items)) {
-                    x.items = [...x.items]
-                        .map(y => {
-                            if (!y.from) y.from = 'user';
-                            return y;
-                        })
-                        .filter(y => y.from === 'user');
-                    if (x.items.length < 1) return null;
-                }
-                return x;
-            })
-            .filter(x => {
-                return x !== null;
-            });
+        .map(x => {
+            if (x.type === 'link' && !x.from) x.from = 'user';
+            else if (x.type === 'link' && x.from === 'cargo') return null;
+            else if (x.type === 'sub' && Array.isArray(x.items)) {
+                x.items = [...x.items]
+                .map(y => {
+                    if (!y.from) y.from = 'user';
+                    return y;
+                })
+                .filter(y => y.from === 'user');
+                if (x.items.length < 1) return null;
+            }
+            return x;
+        })
+        .filter(x => {
+            return x !== null;
+        });
         const _permisos = [...payloadPermisos, ...storePermisos].reduce((acc, x) => {
             const existIndex = acc.findIndex(x => x.id === x.id);
             let nested = null;
@@ -135,23 +126,35 @@ const Colaborador = () => {
 
     return (
         <>
-            <Breadcrumb title="Agregar" parent="Colaborador" url={COLABORADOR_SHOW_ALL} />
+            <Breadcrumb title="Agregar" parent="Colaborador" url={COLABORADOR_SHOW_ALL}/>
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-12">
                         <form
                             className="needs-validation tooltip-validation validateClass"
                             noValidate=""
-                            onSubmit={handleSubmit(ingresar)}
                         >
                             <div className="row">
                                 <div className="col-12 col-md-12 col-lg-10 offset-lg-1 col-xl-8 offset-xl-2">
                                     <div className="card">
-                                        <div className="card-header">
-                                            <h5 className="font-primary">Información General</h5>
+                                        <div className="card-header d-flex justify-content-between">
+                                            <h5 className="font-primary">
+                                                Información General
+                                            </h5>
+                                            <span hidden={canWrite} className="text-secondary">
+                                                ¿Deseas{' '}
+                                                <a
+                                                    href="#"
+                                                    onClick={onClickWantUpdate}
+                                                    className="text-dark font-weight-bold"
+                                                >
+                                                    modificar
+                                                </a>{' '}
+                                                el registro?
+                                            </span>
                                         </div>
                                         <div className="card-body position-relative">
-                                            <Loading active={loading} />
+                                            <Loading active={loading}/>
                                             <div className="row">
                                                 <div className="col-12 col-md-6 col-xl-6">
                                                     <div className="form-row">
@@ -205,7 +208,7 @@ const Colaborador = () => {
                                                                         setData({
                                                                             ...data,
                                                                             email:
-                                                                                event.target.value,
+                                                                            event.target.value,
                                                                         });
                                                                     }}
                                                                     ref={register({
@@ -294,7 +297,7 @@ const Colaborador = () => {
                                                                         setData({
                                                                             ...data,
                                                                             cedula:
-                                                                                event.target.value,
+                                                                            event.target.value,
                                                                         });
                                                                     }}
                                                                     ref={register({
@@ -337,7 +340,7 @@ const Colaborador = () => {
                                                                     setData({
                                                                         ...data,
                                                                         direccion:
-                                                                            event.target.value,
+                                                                        event.target.value,
                                                                     })
                                                                 }
                                                                 placeholder="Ingresa la dirección del colaborador"
@@ -419,4 +422,4 @@ const Colaborador = () => {
     );
 };
 
-export default Colaborador;
+export default withRouter(Handler);

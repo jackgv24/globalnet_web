@@ -1,7 +1,21 @@
 {
     "parserOptions": {
+        "ecmaVersion": 9,
+        "sourceType": "module",
         "ecmaFeatures": {
-            "jsx": true
+            "jsx": true,
+            "modules": true,
+            "experimentalObjectRestSpread": true
         }
+    },
+    "plugins": ["react", "jsx-a11y", "import"],
+    "env": {
+        "es6": true,
+        "browser": true,
+        "node": true,
+        "jest": true
+    },
+    "rules": {
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
     }
 }

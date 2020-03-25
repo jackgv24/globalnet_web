@@ -32,7 +32,7 @@ const Handler = ({ history, match, action = 'update' }) => {
     
     const [fnText, setFnText] = useState('');
     const [permisos, setPermisos] = useState([]);
-    const [initPermisos, setInitPermisos] = useState([]);
+    const [, setInitPermisos] = useState([]);
     const [cargos, setCargos] = useState([]);
 
     const [loader, setLoader] = useState(false);
@@ -40,7 +40,7 @@ const Handler = ({ history, match, action = 'update' }) => {
 
     //#region Functions
     const addFunctions = () => {
-        if (fnText.trim() != '') {
+        if (fnText.trim() !== '') {
             const newFunc = Array.from(data.functions);
             newFunc.push(setFnText);
             setData({...data,functions:newFunc});
@@ -48,7 +48,7 @@ const Handler = ({ history, match, action = 'update' }) => {
         }
     };
     const delFunctions = index => {
-        const newFunc = Array.from(data.functions)
+        const newFunc = Array.from(data.functions);
         newFunc.splice(index,1);
         setData({...data,functions:newFunc});
     };
@@ -207,11 +207,12 @@ const Handler = ({ history, match, action = 'update' }) => {
                                                                 <input
                                                                     id="dafault-checkbox"
                                                                     type="checkbox"
-                                                                    checked={data.active}
+                                                                    defaultChecked={data.active}
                                                                     onChange={(event)=>{
                                                                         if(canWrite) setData({...data,active:event.currentTarget.checked});
                                                                     }}
                                                                     readOnly={canWrite}
+                                                                    disabled={!canWrite}
                                                                 />
                                                                 <label
                                                                     className="mb-0"

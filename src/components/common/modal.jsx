@@ -4,13 +4,13 @@ const Modal = ({ active = false,background=null }) => {
     const [style, setStyle] = useState({
         top: 0,
         left: 0,
-        background: 'rgba(255,255,255,0.5)',
+        background: 'rgba(255,255,255,0.85)',
         zIndex: 10,
     });
 
     useLayoutEffect(()=>{
         if(background !== null) setStyle({...style,background})
-    },[])
+    },[]);
 
     return (
         <div
@@ -22,10 +22,10 @@ const Modal = ({ active = false,background=null }) => {
         >
             <div className="loader-box">
                 <div className="loader">
-                    <div className="line"></div>
-                    <div className="line"></div>
-                    <div className="line"></div>
-                    <div className="line"></div>
+                    <div className="line bg-dark"></div>
+                    <div className="line bg-dark"></div>
+                    <div className="line bg-dark"></div>
+                    <div className="line bg-dark"></div>
                 </div>
             </div>
         </div>
